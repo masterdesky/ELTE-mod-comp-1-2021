@@ -3,35 +3,40 @@
 One of the requirements for completing the course is to develop and submit a project work, freely chosen from the list below, by the end of the semester. The project should be written entirely in C++, and a corresponding $\LaTeX$ report should be also submitted along with it.
 
 ## List of project works
-1. *Creating a vector and square matrix `struct`.* On type-level it should have a predefined size, similar to `std::array`. Regular mathematical operations should be made available to used between the created structures. In case of the matrix structure, two of the following methods should be implemented and tested using the created `struct`:
+1. **Creating a vector and squared matrix `struct`.** Create a `struc`, which stores an arbitrary vector or a squared matrix. On type-level it should have a predefined size, similar to `std::array`. Regular mathematical operations should be made available to used between the created structures. In case of the matrix structure, two of the following methods should be implemented and tested using the created `struct`:
     - Solving linear equation systems, where $A \boldsymbol{x} = \boldsymbol{b}$ and $\boldsymbol{b}$ is known,
     - calculating the determinant,
     - calculating the inverse.
 
-2. *Representation of $3$-dimensional rotations in various ways.* Quaternios, $3 \times 3$ matrices, axis–angle representation and conversions between all of the above.
+2. **Representation of $3$-dimensional rotations in various ways.** Quaternios, $3 \times 3$ matrices, axis–angle representation and conversions between all of the above.
 
-3. *Creating a polynomial `class` with $1$ variable.* The class should store the coefficients of the polynomial (which should change dynamically if needed), and needs to support the basic operations: addition, subtraction, product, composition, derivative and the value of the integral at a given domain, finding roots of the polynomial (eg. using Newton's iteration), etc.
+3. **Creating a polynomial `class` with $1$ variable.** The `class` should store the coefficients of the polynomial (which should change dynamically if needed), and needs to support the basic operations: addition, subtraction, product, composition, derivative and the value of the integral at a given domain, finding roots of the polynomial (eg. using Newton's iteration), etc.
 
-4. *Creating a function `class` with $1$ variable.* The class should store the discretization of a continuous function in an arbitrary representation. The goal is to construct it in a way, that the class can be used for the following tasks:
+4. **Creating a function `class` with $1$ variable.** The `class` should store the discretization of a continuous function in an arbitrary representation. The goal is to construct it in a way, that the class can be used for the following tasks:
     - Interpolate the function,
     - calculate definite integrals and derivatives,
     - finding roots and extrema of the function  
 at any given points.
 
-5. *Creating a histogram class with $1$ variable.* The defined histogram should have dynamically adjustable boundaries and binning frequency. The user should also have the option to add, substract, miltiply with a scalar, divide and randomly sample two identical histograms as a distribution.
+5. **Creating a histogram class with $1$ variable.** The defined histogram should have dynamically adjustable boundaries and binning frequency. The user should also have the option to add, substract, multiply with a scalar, divide and randomly sample two identical histograms as a distribution.
 
-6. *Generating pseudo-random numbers.* Write a program, which generates normally distributed pseudo-random numbers, where the variance of the generated numbers are $\sigma^{2} = 1/2$. Plot the relative frequency of the randomly generated numbers and their corresponding Probability Mass Function.
+6. **Generating pseudo-random numbers.** Write a program, which generates normally distributed pseudo-random numbers, where the variance of the generated numbers are $\sigma^{2} = 1/2$. Plot the relative frequency of the randomly generated numbers and their corresponding Probability Mass Function.
 
-7. *RNG benchmarking.* Compare the speed and statistical attributes of the various built-in RNGs. Explore, wheter we can find correlations between the randomly generate numbers in higher dimensions.
+7. **RNG benchmarking.** Compare the speed and statistical attributes of the various built-in RNGs. Explore, wheter we can find correlations between the randomly generate numbers in higher dimensions.
 
-8. *Tracking units and working with prefixes.* 
+8. **Tracking units and working with prefixes.** Create a `class`, which stores a given `T` type, representing a unit of measurement. Besides this, it also stores, how this unit can be constructed using $3$, predefined, hard-coded SI units (eg. length, time and mass), by storing their exponent in the formula of the `T` quantity. For example, `Velocity` can be represented using length, time and mass in the following way: 
+```
+template<typename T, int L, int T, int M> class ValueWithDimension;
+template<typename T> using Velocity = ValueWithDimension<T, 1, -1, 0>
+```
+Construct this class in a way, that it can handle basic arithmetic operations between appropriate quantities. Eg. it should permit addition or substraction between quantities with the same unit only, while it should handle the changes in the unit of the result in case of multiplication and division. Extend the class with the functionality to also store and handle known SI prefixes for quantities. The class should try to choose the best intermediate prefix for the results of operations (e.g. $1$ km + $1$ mm $\to$ $1000.001$ m).
 
-9. *Create a temperature `class`.* Create a class, which stores a temperature value in arbitrary units (Celsius, Kelvin, Fahrenheit, Rankine, Delisle, Römer, etc.). In addition, it should be able to add, subtract, convert, and sort $n$, arbitrary temperature values.
+9. **Create a temperature `class`.** Create a `class`, which stores a temperature value in arbitrary units (Celsius, Kelvin, Fahrenheit, Rankine, Delisle, Römer, etc.). In addition, it should be able to add, subtract, convert, and sort $n$, arbitrary temperature values.
 
-10. *Simulating a double pendulum.* Create a double pendulum simulation using the $4$th order Runge-Kutta integration method and graphically display the pendulum. The weights should be able to be pushed around with the mouse. Draw the phase space of the pendulums as well.
+10. **Simulating a double pendulum.** Create a double pendulum simulation using the $4$th order Runge-Kutta integration method and graphically display the pendulum. The weights should be able to be pushed around with the mouse. Draw the phase space of the pendulums as well.
 
-11. *Ideal gas in gravitational field.* Using the $4$th-order Runge-Kutta integration method, create a $2$-dimensional simulation in which small circular gas particles collide flexibly with each other and with the lower surface. Consider a horizontal periodic boundary condition, where the system is open upwards and the gravitational force decreases with height. Calculate the thermodynamic state functions (temperature, pressure), separately for the average and for different altitude regions.
+11. **Ideal gas in gravitational field.** Using the $4$th-order Runge-Kutta integration method, create a $2$-dimensional simulation in which small circular gas particles collide flexibly with each other and with the lower surface. Consider a horizontal periodic boundary condition, where the system is open upwards and the gravitational force decreases with height. Calculate the thermodynamic state functions (temperature, pressure), separately for the average and for different altitude regions.
 
-12. *Field of a point charge.* Determine the electric field and potential generated by $n$ point charges in $2$-dimension (solving a Poisson equation). The calculate fields should be visualized in a meaningful way. Try as many charge arrangements as possible and - if possible - compare them with the analytical solution. 
+12. **Field of a point charge.** Determine the electric field and potential generated by $n$ point charges in $2$-dimension (solving a Poisson equation). The calculate fields should be visualized in a meaningful way. Try as many charge arrangements as possible and - if possible - compare them with the analytical solution. 
 
-13. *Mandelbrot set.* Create a program, which plots an arbitrary Mandelbrot set. The user should be able to zoom and navigate with the mouse in the display window.
+13. **Mandelbrot set.** Create a program, which plots an arbitrary Mandelbrot set. The user should be able to zoom and navigate with the mouse in the display window.
