@@ -16,7 +16,7 @@ One of the requirements for completing the course is to develop and submit a pro
     - Interpolate the function,
     - calculate definite integrals and derivatives,
     - finding roots and extrema of the function
-at any given points.
+    at any given points.
 
 5. **Creating a histogram class with $1$ variable.** The defined histogram should have dynamically adjustable boundaries and binning frequency. The user should also have the option to add, substract, multiply with a scalar, divide and randomly sample two identical histograms as a distribution.
 
@@ -25,11 +25,11 @@ at any given points.
 7. **RNG benchmarking.** Compare the speed and statistical attributes of the various built-in RNGs. Explore, wheter we can find correlations between the randomly generate numbers in higher dimensions.
 
 8. **Tracking units and working with prefixes.** Create a `class`, which stores a given `T` type, representing a unit of measurement. Besides this, it also stores, how this unit can be constructed using $3$, predefined, hard-coded SI units (eg. length, time and mass), by storing their exponent in the formula of the `T` quantity. For example, `Velocity` can be represented using length, time and mass in the following way: 
-```
-template<typename T, int L, int T, int M> class ValueWithDimension;
-template<typename T> using Velocity = ValueWithDimension<T, 1, -1, 0>
-```
-Construct this class in a way, that it can handle basic arithmetic operations between appropriate quantities. Eg. it should permit addition or substraction between quantities with the same unit only, while it should handle the changes in the unit of the result in case of multiplication and division. Extend the class with the functionality to also store and handle known SI prefixes for quantities. The class should try to choose the best intermediate prefix for the results of operations (e.g. $1$ km + $1$ mm $\to$ $1000.001$ m).
+    ```
+    template<typename T, int L, int T, int M> class ValueWithDimension;
+    template<typename T> using Velocity = ValueWithDimension<T, 1, -1, 0>
+    ```
+    Construct this class in a way, that it can handle basic arithmetic operations between appropriate quantities. Eg. it should permit addition or substraction between quantities with the same unit only, while it should handle the changes in the unit of the result in case of multiplication and division. Extend the class with the functionality to also store and handle known SI prefixes for quantities. The class should try to choose the best intermediate prefix for the results of operations (e.g. $1$ km + $1$ mm $\to$ $1000.001$ m).
 
 9. **Create a temperature `class`.** Create a `class`, which stores a temperature value in arbitrary units (Celsius, Kelvin, Fahrenheit, Rankine, Delisle, Römer, etc.). In addition, it should be able to add, subtract, convert, and sort $n$, arbitrary temperature values.
 
