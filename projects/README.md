@@ -15,7 +15,7 @@ One of the requirements for completing the course is to develop and submit a pro
 4. **Creating a function `class` with $1$ variable.** The `class` should store the discretization of a continuous function in an arbitrary representation. The goal is to construct it in a way, that the class can be used for the following tasks:
     - Interpolate the function,
     - calculate definite integrals and derivatives,
-    - finding roots and extrema of the function  
+    - finding roots and extrema of the function
 at any given points.
 
 5. **Creating a histogram class with $1$ variable.** The defined histogram should have dynamically adjustable boundaries and binning frequency. The user should also have the option to add, substract, multiply with a scalar, divide and randomly sample two identical histograms as a distribution.
