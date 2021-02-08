@@ -1,6 +1,6 @@
 # Final projects
 
-One of the requirements for completing the course is to develop and submit a project work, freely chosen from the list below, by the end of the semester. The project should be written entirely in C++, and a corresponding $\LaTeX$ report should be also submitted along with it.
+One of the requirements for completing the course is to develop and submit a project work, freely chosen from the list below, by the end of the semester. The project should be written entirely in `C++`, and a corresponding $\LaTeX$ report should be also submitted along with it.
 
 ## List of project works
 1. **Creating a vector and squared matrix `struct`.** Create a `struc`, which stores an arbitrary vector or a squared matrix. On type-level it should have a predefined size, similar to `std::array`. Regular mathematical operations should be made available to used between the created structures. In case of the matrix structure, two of the following methods should be implemented and tested using the created `struct`:
@@ -15,8 +15,7 @@ One of the requirements for completing the course is to develop and submit a pro
 4. **Creating a function `class` with $1$ variable.** The `class` should store the discretization of a continuous function in an arbitrary representation. The goal is to construct it in a way, that the class can be used for the following tasks:
     - Interpolate the function,
     - calculate definite integrals and derivatives,
-    - finding roots and extrema of the function
-    at any given points.
+    - finding roots and extrema of the function at any given points.
 
 5. **Creating a histogram class with $1$ variable.** The defined histogram should have dynamically adjustable boundaries and binning frequency. The user should also have the option to add, substract, multiply with a scalar, divide and randomly sample two identical histograms as a distribution.
 
