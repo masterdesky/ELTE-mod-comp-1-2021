@@ -3,7 +3,7 @@
 One of the requirements for completing the course is to develop and submit a project work, freely chosen from the list below, by the end of the semester. The project should be written entirely in `C++`, and a corresponding $\LaTeX$ report should be also submitted along with it.
 
 ## List of project works
-1. **Creating a vector and squared matrix `struct`.** Create a `struc`, which stores an arbitrary vector or a squared matrix. On type-level it should have a predefined size, similar to `std::array`. Regular mathematical operations should be made available to used between the created structures. In case of the matrix structure, two of the following methods should be implemented and tested using the created `struct`:
+1. **Creating a vector and squared matrix `struct`.** Create a `struc`, which stores an arbitrary vector or a squared matrix. On type-level it should have a predefined size, similar to the behaviour of `std::array`. Regular mathematical operations should be implemented to be used between the created structures. In case of the matrix structure, two of the following methods should be implemented and tested using an object, defined by the created `struct`:
     - Solving linear equation systems, where $A \boldsymbol{x} = \boldsymbol{b}$ and $\boldsymbol{b}$ is known,
     - calculating the determinant,
     - calculating the inverse.
