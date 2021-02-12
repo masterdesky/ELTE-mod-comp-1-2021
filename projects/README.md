@@ -68,12 +68,7 @@ The noise and data generation and the particle (or more like "particles") class 
 
 18. **Mandelbrot set.** Create a program, which plots an arbitrary Mandelbrot set. The user should be able to zoom and navigate with the mouse in the display window.
 
-19. **Van der Waals gas in a box.** Using the $4$th order Runge-Kutta, write a 2D simulation where $N = 1000$ particles move in box of volume $V$. The particles have a finite radius, collide as rigid spheres and the Lennard-Jones potential acts between them:
-
-    $$
-    V \left( r \right)
-    =
-    4 \varepsilon \left( \left( \sigma / r \right)^{12} - \left( \sigma / r \right)^{6} \right)
-    $$
+19. **Van der Waals gas in a box.** Using the $4$th order Runge-Kutta, write a 2D simulation where $N = 1000$ particles move in box of volume $V$. The particles have a finite radius, collide as rigid spheres and the Lennard-Jones potential acts between them:  
+$V \left( r \right) = 4 \varepsilon \left( \left( \sigma / r \right)^{12} - \left( \sigma / r \right)^{6} \right)$
 
 20. **Shortest path algorithm.** Implementation of a shortest path algorithm (eg. inspired after a recent Bosch competitions, where the a car has to travel from $A$ to $B$ based on average journey times on a graph. In the next turn it was varied so that there were traffic lights with known timings too in the graph. Random plugs were also considered in the third round). The point is to find the Dijkstra algorithm and implement it.
