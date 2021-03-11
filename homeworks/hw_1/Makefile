@@ -3,23 +3,22 @@ SDIR		=	src
 ODIR		=	obj
 IDIR		=	include
 
-CC				=	clang++ -std=c++17
+CXX				=	clang++ -std=c++17
 OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
-LIBS			=	-lm
+LDFLAGS		=	-lm
 
-_DEPS		=	template.h generate_grid.h
+_DEPS		=	newton.hpp functions.hpp
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o generate_grid.o 
-obj 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
-
+_OBJ		=	main.o
+OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CXX) -c -o $@ $< $(CFLAGS)
 
-$(BDIR)/perlin: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+$(BDIR)/newton: $(OBJ)
+	$(CXX) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean
 

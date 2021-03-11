@@ -9,13 +9,13 @@
 #include <template.h>
 #include <generate_grid.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char const *argv[])
 {
 	if(argc != 4)
 	{
 		std::cout << "ERROR!\n" << "------" << std::endl;
 		std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-		std::cout << "Usage: ./generate_perlin_noise <nrows> <ncols> <res>" << std::endl;
+		std::cout << "Usage: ./perlin <nrows> <ncols> <res>" << std::endl;
 		std::cout << "Exiting..." << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -57,5 +57,5 @@ int main(int argc, char *argv[])
 
 	// Calculate the dot products for all the sub-cell coordinates
 
-	return(0);
+	return 0;
 }
