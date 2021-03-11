@@ -1,3 +1,7 @@
+# Ignore bins and objects
+bin/
+obj/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
