@@ -11,8 +11,8 @@ LIBS			=	-lm
 _DEPS		=	template.h generate_grid.h
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o generate_grid.o 
-obj 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
+_OBJ		=	main.o generate_grid.o
+OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)

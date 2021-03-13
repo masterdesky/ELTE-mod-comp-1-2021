@@ -1,6 +1,3 @@
-#include <iostream>
-#include <fstream>
-
 #include <math.h>
 #include <algorithm>
 #include <vector>
@@ -10,15 +7,16 @@
 #include <generate_grid.h>
 
 // Generate the a coordinate field between given limits
-vec_2d<double> get_coordinates(int nrows, int ncols,
-															 std::vector<double> x_lim,
-															 std::vector<double> y_lim)
+ndvector<2,double>::t
+Perlin::get_coordinates(int nrows, int ncols,
+												ndvector<1,double>::t x_lim,
+												ndvector<1,double>::t y_lim)
 {
-	// Placeholder for the coordinate grid
-	vec_2d<double> coordinates (nrows * ncols);
+	// Declaration of the coordinate grid
+	ndvector<2,double>::t coordinates (nrows * ncols);
 	
-	// Calculate stepsize for each direction
-	double x_step = (x_lim[1] - x_lim[0]) / ncols; // X directon perp. to cols
+	// Calculate stepsize in each direction
+	double x_step = (x_lim[1] - x_lim[0]) / ncols; // X direction perp. to cols
 	double y_step = (y_lim[1] - y_lim[0]) / nrows; // Y direction perp. to rows
 
 	// Calculate coordinates of gridpoints
@@ -33,14 +31,14 @@ vec_2d<double> get_coordinates(int nrows, int ncols,
 	return(coordinates);
 }
 
-
 // Create the grid-cells
-vec_2d<int> create_cells(int nrows, int ncols)
+ndvector<2,int>::t
+Perlin::create_cells(int nrows, int ncols)
 {
 	// Number of cells in each rows and columns
 	int crows = nrows - 1;
 	int ccols = ncols - 1;
-	vec_2d<int> cells (crows * ccols);
+	ndvector<2,int>::t cells (crows * ccols);
 
 	// Iterate over all points, except the last row and the last column.
 	// The iteration is basically over the possible upper left corners for a cell.
@@ -67,16 +65,20 @@ vec_2d<int> create_cells(int nrows, int ncols)
 
 
 // Create sub-cells in which dot products are evaluated
-vec_3d<double> create_sub_grid(int res,
-															 vec_2d<double> const &coordinates,
-															 vec_2d<int> const &cells)
+ndvector<3,double>::t
+Perlin::create_sub_grid(int res,
+												ndvector<2,double>::t const &coordinates,
+												ndvector<2,int>::t const &cells)
 {
 	// Placeholder for the subcells
 	// Each entry consist of a cell
-	vec_3d<double> sub_grid (
-												(int)cells.size(),
-												vec_2d<double>(4*res*res, std::vector<double>(2))
-											);
+	ndvector<3,double>::t sub_grid (
+														(int)cells.size(),
+														ndvector<2,double>::t (
+																4*res*res,
+																std::vector<double>(2)
+														)
+												);
 
 	// Iterate over all cells
 	// i : index of a cell
@@ -96,15 +98,15 @@ vec_3d<double> create_sub_grid(int res,
 		// j=1: x_max/2-x_max and y_min-y_max/2 // Bottom right
 		// j=2: x_min-x_max/2 and y_max/2-y_max // Upper left
 		// j=3: x_max/2-x_max and y_max/2-y_max // Upper right
-		vec_2d<double> sub_cell_lims {
+		ndvector<2,double>::t sub_cell_lims {
 																	{x_min, x_max/2, y_min, y_max/2},
 																	{x_max/2, x_max, y_min, y_max/2},
 																	{x_min, x_max/2, y_max/2, y_max},
 																	{x_max/2, x_max, y_max/2, y_max}	
 																};
 
-		// Placeholder for the concatenated four subcell inside the current cell
-		vec_2d<double> temp_cell;
+		// Placeholder for the concatenated four subcells inside the current cell
+		ndvector<2,double>::t temp_cell;
 
 		// Finally the actual iteration over the cell corners
 		for(std::size_t j = 0; j < cells[i].size(); j++)
@@ -128,9 +130,10 @@ vec_3d<double> create_sub_grid(int res,
 
 
 // Return a 2D vector with a given `phi` argument
-std::vector<double> get_gradient(double phi)
+ndvector<1,double>::t
+Perlin::get_gradient(double phi)
 {
-	std::vector<double> gradient {sin(phi), cos(phi)};
+	ndvector<1,double>::t gradient {sin(phi), cos(phi)};
 
 	return(gradient);
 }
@@ -138,7 +141,8 @@ std::vector<double> get_gradient(double phi)
 
 // Create a discrete vector field of vectors with randomly choosen
 // arguments. Vectors are situated in each gridpoints.
-vec_2d<double> get_gradient_field(int nrows, int ncols)
+ndvector<2,double>::t
+Perlin::get_gradient_field(int nrows, int ncols)
 {
 	// Initialize the Mersenne-Twister RNG to choose
 	// values from a uniform distribution between 0 and 2pi
@@ -147,7 +151,7 @@ vec_2d<double> get_gradient_field(int nrows, int ncols)
   std::uniform_real_distribution<> Distribution(0, 2*pi());
 
   // Placeholder for the gradient field
-  vec_2d<double> gradient_field (nrows * ncols);
+  ndvector<2,double>::t gradient_field (nrows * ncols);
 
   // Generate the gradient field
   for(std::size_t i = 0; i < gradient_field.size(); i++)
@@ -162,15 +166,16 @@ vec_2d<double> get_gradient_field(int nrows, int ncols)
 
 // Calculate the dot product between the generated vector field in every
 // corner of the grid cells.
-vec_2d<double> get_dist_vector_field(int res,
-																		 vec_2d<double> const &coordinates,
-																		 vec_2d<int> const &cells)
+ndvector<2,double>::t
+Perlin::get_dist_vector_field(int res,
+															ndvector<2,double>::t const &coordinates,
+															ndvector<2,int>::t const &cells)
 {
 	// Placeholder for the distance matrix. Contains the difference of
 	// cell corners and sub-cell points.
-	vec_2d<double>dist_vector_field (
+	ndvector<2,double>::t dist_vector_field (
 																(int)cells.size() * (4 * res * res),
-																std::vector<double>(2)
+																ndvector<1,double>::t (2)
 															);
 	auto sub_grid = create_sub_grid(res,
 																	coordinates, cells);
@@ -188,7 +193,7 @@ vec_2d<double> get_dist_vector_field(int res,
 			// Identify vectors to calculate distance between
 			auto a = coordinates[cells[i][j]];	// Closest corner's coordinates
 			auto b = sub_grid[i][k];						// Current sub-point's coordinates
-			std::vector<double> d (2);					// Placeholder for distance vector
+			ndvector<1,double>::t d (2);				// Placeholder for distance vector
 
 			// Calculate distance between vectors `a` and `b`: d = a - b
 			std::transform(a.begin(), a.end(), b.begin(), d.begin(),
@@ -203,11 +208,12 @@ vec_2d<double> get_dist_vector_field(int res,
 }
 
 
-vec_2d<double> get_dot_product(int nrows, int ncols, int res,
-															 vec_2d<double>const &coordinates,
-															 vec_2d<int> const &cells,
-															 vec_2d<double> const &gradient_field,
-															 vec_2d<double> const &dist_vector_field)
+ndvector<2,double>::t
+Perlin::get_dot_product(int nrows, int ncols, int res,
+												ndvector<2,double>::t const &coordinates,
+												ndvector<2,int>::t const &cells,
+												ndvector<2,double>::t const &gradient_field,
+												ndvector<2,double>::t const &dist_vector_field)
 {
 	// Placeholder for the dot-product table
 	vec_2d<double> dot_product (

@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////
 //
-//		Finding roots of real-valued functions using
-//		the Newton-Raphson method
+//    Finding roots of real-valued functions using
+//    the Newton-Raphson method
 //
-//		File : newton.hpp
-//		Desc : Implements the Newton-Raphson method
+//    File : newton.hpp
+//    Desc : Implements the Newton-Raphson method
 //
-//		Written by Balázs Pál @ 2021
-//		For Furu and Szigety
+//    Written by Balázs Pál @ 2021
+//    For Furu and Szigety
 //
 ////////////////////////////////////////////////////////
 
@@ -76,7 +76,7 @@ T Newton(F f, Fp fp, T &x_0, int &n_iter, T &epsilon) {
 		std::cout << "Current f(x_n) = " << f(x_n) << std::endl;
 		std::cout << "Current f'(x_n) = " << fp(x_n) << std::endl;
 	
-		// Stop if accuracy limit reached before finishing all iterations
+		// Stop if accuracy limit is reached before finishing all iterations
 		if(fabs(f(x_n)) <= epsilon) {
 			std::cout << "\n" << std::endl;
 			std::cout << "FOUND SOLUTION! z_0 = " << x_n << std::endl;

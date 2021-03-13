@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////
 //
-//		Finding roots of real-valued functions using
-//		the Newton–Raphson method
+//    Finding roots of real-valued functions using
+//    the Newton–Raphson method
 //
-//		File : function.hpp
-//		Desc : Contains the definition to the real-valued
-//					 function and to its derivate
+//    File : function.hpp
+//    Desc : Contains the definition to the real-valued
+//           function and to its derivate
 //
-//		Written by Balázs Pál @ 2021
-//		For Furu and Szigety
+//    Written by Balázs Pál @ 2021
+//    For Furu and Szigety
 //
 ////////////////////////////////////////////////////////
 

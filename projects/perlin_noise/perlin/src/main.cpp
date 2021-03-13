@@ -1,3 +1,17 @@
+////////////////////////////////////////////////////////
+//
+//    Creating 2D Perlin noise art in C++ by implementing
+//    https://mrl.cs.nyu.edu/~perlin/paper445.pdf
+//
+//    File : main.cpp
+//    Desc : Contains the main method of the project
+//    Tabsize : 2 spaces
+//
+//    Written by Balázs Pál @ 2021
+//    For Furu and Szigetty
+//
+////////////////////////////////////////////////////////
+
 #include <iostream>
 #include <fstream>
 
@@ -8,6 +22,7 @@
 
 #include <template.h>
 #include <generate_grid.h>
+#include <io.h>
 
 int main(int argc, char const *argv[])
 {
@@ -24,29 +39,40 @@ int main(int argc, char const *argv[])
 	// try to give sensible arguments when execute
 	int nrows = std::stoi(argv[1]);
 	int ncols = std::stoi(argv[2]);
-
 	// Resolution of sub-cells
-	// A regular cell consists of 4 sub-cells with `res`x`res` number of points each
+	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
+	// each
 	int res = std::stoi(argv[3]);
 
-	// Create the coordinate grid
+	////////////////////////////////////////////////////////
+	//
+	//  I. Create the outer, main grid
+	//
+	////
 	auto coordinates = get_coordinates(nrows, ncols,
 																		 {0, (double)ncols}, {0, (double)nrows});
 	write_to_file<vec_2d<double>>(coordinates,
-																"../data/coordinates.txt");
-
+																"../data/coordinates.dat");
 	// Mark cell borders
 	auto cells = create_cells(nrows, ncols);
 	write_to_file<vec_2d<int>>(cells,
-										 				 "../data/cells.txt");
+										 				 "../data/cells.dat");
 
-	// Create smaller square sub-grids inside cells
+	////////////////////////////////////////////////////////
+	//
+	//  II. Create the inner, high resolution grid
+	//
+	////
 	auto sub_grid = create_sub_grid(res,
 																	coordinates, cells);
 	//write_to_file<std::vector<double>>(sub_grid,
-	//											"sub_grid.txt");
+	//											"sub_grid.dat");
 
-	// Create the initial gradient field
+	////////////////////////////////////////////////////////
+	//
+	//  III. Create the initial gradient field
+	//
+	////
 	auto gradient_field = get_gradient_field(nrows, ncols);
 	write_to_file<vec_2d<double>>(gradient_field,
 																"../data/gradient_field.txt");
@@ -55,7 +81,19 @@ int main(int argc, char const *argv[])
 	auto dist_vector_field = get_dist_vector_field(res,
 																										 coordinates, cells);
 
-	// Calculate the dot products for all the sub-cell coordinates
+	////////////////////////////////////////////////////////
+	//
+	//  IV. Calculate the dot products for all the
+	//      sub-cell coordinates
+	//
+	////
+
+
+	////////////////////////////////////////////////////////
+	//
+	//	V. 
+	//
+	////
 
 	return 0;
 }

@@ -3,7 +3,7 @@ SDIR		=	src
 ODIR		=	obj
 IDIR		=	include
 
-CXX				=	clang++ -std=c++17
+CXX				=	g++ -std=c++17
 OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
 LDFLAGS		=	-lm
