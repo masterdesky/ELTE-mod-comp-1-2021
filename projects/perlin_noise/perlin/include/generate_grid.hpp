@@ -14,8 +14,12 @@
 ////////////////////////////////////////////////////////
 
 class Perlin {
+	/*
+	
+	All return values are explicitly defined to serve a clearer understanding.
+	*/
 	public:
-		// Generate the a coordinate field between given limits
+		// Generate the a coordinate grid between given limits
 		ndvector<2,double>::t
 		get_coordinates(int nrows, int ncols,
 										ndvector<1,double>::t x_lim,

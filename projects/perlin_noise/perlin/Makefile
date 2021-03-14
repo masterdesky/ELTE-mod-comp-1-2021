@@ -8,10 +8,10 @@ OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
 LIBS			=	-lm
 
-_DEPS		=	template.h generate_grid.h
+_DEPS		=	template.hpp generate_grid.hpp io.hpp
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o generate_grid.o
+_OBJ		=	main.o generate_grid.o io.o
 OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 

@@ -14,10 +14,15 @@
 
 class PerlinIO {
 	public:
-		template <typename T>
-		void write_to_file(T const &table,
-	            				 std::string filename);
+		template <typename T> void
+		write_to_file(T const &table,
+	            		std::string filename);
 	private:
-		ndvector<1,double>::t
-		flatten();
+		template<typename T>
+		void PerlinIO::write_vec(const std::vector<T> &v,
+														 std::ofstream output_file);
+
+		template<typename T, typename Td>
+		void PerlinIO::write_vec(const std::vector<std::vector<T>> &v,
+														 std::ofstream output_file);
 }

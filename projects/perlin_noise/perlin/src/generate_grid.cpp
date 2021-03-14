@@ -1,12 +1,27 @@
+////////////////////////////////////////////////////////
+//
+//    Creating 2D Perlin noise art in C++ by implementing
+//    https://mrl.cs.nyu.edu/~perlin/paper445.pdf
+//
+//    File : generate_grid.cpp
+//    Desc : Contains the definition to the `Perlin` class
+//           that directly handles the noise grid generation
+//    Tabsize : 2 spaces
+//
+//    Written by Balázs Pál @ 2021
+//    For Furu and Szigetty
+//
+////////////////////////////////////////////////////////
+
 #include <math.h>
 #include <algorithm>
 #include <vector>
 #include <random>
 
-#include <template.h>
-#include <generate_grid.h>
+#include <template.hpp>
+#include <generate_grid.hpp>
 
-// Generate the a coordinate field between given limits
+// Generate a 2D coordinate grid between given X and Y limits
 ndvector<2,double>::t
 Perlin::get_coordinates(int nrows, int ncols,
 												ndvector<1,double>::t x_lim,
@@ -19,7 +34,7 @@ Perlin::get_coordinates(int nrows, int ncols,
 	double x_step = (x_lim[1] - x_lim[0]) / ncols; // X direction perp. to cols
 	double y_step = (y_lim[1] - y_lim[0]) / nrows; // Y direction perp. to rows
 
-	// Calculate coordinates of gridpoints
+	// Calculate coordinates of grid points
 	for(int i = 0; i < nrows; i++)
 	{
 		for(int j = 0; j < ncols; j++)
@@ -76,7 +91,7 @@ Perlin::create_sub_grid(int res,
 														(int)cells.size(),
 														ndvector<2,double>::t (
 																4*res*res,
-																std::vector<double>(2)
+																ndvector<1,double>::t (2)
 														)
 												);
 
@@ -218,7 +233,7 @@ Perlin::get_dot_product(int nrows, int ncols, int res,
 	// Placeholder for the dot-product table
 	vec_2d<double> dot_product (
 														(int)cells.size(),
-														std::vector<double>(4 * res * res)
+														ndvector<1,double>::t (4 * res * res)
 													);
 
 	return(dot_product);

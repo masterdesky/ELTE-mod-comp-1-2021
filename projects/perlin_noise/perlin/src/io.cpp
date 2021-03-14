@@ -15,38 +15,47 @@
 #include <iostream>
 #include <fstream>
 
+#include <vector>
+
 #include <template.hpp>
 #include <io.hpp>
 
 // Write an N-dimensional vector into a file
-template <typename T>
-void PerlinIO::write_to_file(T const &table,
-                             std::string filename)
+template<typename T>
+void PerlinIO::write_vec(const std::vector<T> &v,
+                         std::ofstream output_file)
+{
+  for (const auto &value:vector)
+  {
+    output_file << value << std::endl;
+  }
+}
+
+template<typename T, typename Td>
+void PerlinIO::write_vec(const std::vector<std::vector<T>> &v,
+                         std::ofstream output_file)
+{
+  for (const auto &value:vector)
+  {
+    PerlinIO::write_vec<T>(value, output_file);
+    output_file << '\n' << std::endl;
+  }
+}
+
+
+template <typename T> void
+PerlinIO::write_to_file(T const &table,
+                        std::string filename)
 {
   std::ofstream output_file;
   // Save the input vector
   output_file.open(filename);
 
   // Flatten the input table
-  auto flatten_table = PerlinIO::flatten(table);
+  //auto flatten_table = PerlinIO::flatten(table);
 
-  for(std::size_t i = 0; i < table.size(); i++)
-  {
-    for(std::size_t j = 0; j < table[i].size(); j++)
-    {
-      output_file << table[i][j] << ",";
-    }
-    output_file << std::endl;
-  }
+  PerlinIO::write_vec(table, output_file)
 
   output_file.close();
-}
-
-ndvector<1,double>::t
-PerlinIO::flatten(T const &table)
-{
-  ndvector<1,double>::t flatten_table;
-
-  return flatten_table;
 }
 

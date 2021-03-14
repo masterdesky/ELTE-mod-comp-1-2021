@@ -20,9 +20,9 @@
 #include <chrono>
 #include <ctime>
 
-#include <template.h>
-#include <generate_grid.h>
-#include <io.h>
+#include <template.hpp>
+#include <generate_grid.hpp>
+#include <io.hpp>
 
 int main(int argc, char const *argv[])
 {
@@ -49,22 +49,30 @@ int main(int argc, char const *argv[])
 	//  I. Create the outer, main grid
 	//
 	////
-	auto coordinates = get_coordinates(nrows, ncols,
-																		 {0, (double)ncols}, {0, (double)nrows});
-	write_to_file<vec_2d<double>>(coordinates,
-																"../data/coordinates.dat");
-	// Mark cell borders
-	auto cells = create_cells(nrows, ncols);
-	write_to_file<vec_2d<int>>(cells,
-										 				 "../data/cells.dat");
+	auto grid_main = Perlin::get_coordinates(
+									 		nrows, ncols,
+									 		{0, (double)ncols}, {0, (double)nrows}
+									 );
+	PerlinIO::write_to_file<ndvector<2,double>::t>(
+			coordinates,
+			"../data/coordinates.dat"
+	);
+	// Mark main cell borders
+	auto cells = Perlin::create_cells(nrows, ncols);
+	PerlinIO::write_to_file<ndvector<2,int>::t>(
+			cells,
+			"../data/cells.dat"
+	);
 
 	////////////////////////////////////////////////////////
 	//
-	//  II. Create the inner, high resolution grid
+	//  II. Create the inner, high resolution sub-grid
 	//
 	////
-	auto sub_grid = create_sub_grid(res,
-																	coordinates, cells);
+	auto grid_sub = Perlin::create_sub_grid(
+											res,
+											coordinates, cells
+									);
 	//write_to_file<std::vector<double>>(sub_grid,
 	//											"sub_grid.dat");
 
@@ -73,13 +81,19 @@ int main(int argc, char const *argv[])
 	//  III. Create the initial gradient field
 	//
 	////
-	auto gradient_field = get_gradient_field(nrows, ncols);
-	write_to_file<vec_2d<double>>(gradient_field,
-																"../data/gradient_field.txt");
+	auto gradient_field = Perlin::get_gradient_field(
+														nrows, ncols
+												);
+	PerlinIO::write_to_file<ndvector<2,double>::t>(
+			gradient_field,
+			"../data/gradient_field.txt"
+	);
 
 	// Calculate the distance vectors for sub-cells
-	auto dist_vector_field = get_dist_vector_field(res,
-																										 coordinates, cells);
+	auto dist_vector_field = Perlin::get_dist_vector_field(
+													 		res,
+													 		coordinates, cells
+													 );
 
 	////////////////////////////////////////////////////////
 	//
