@@ -23,12 +23,12 @@
 
 // Generate a 2D coordinate grid between given X and Y limits
 ndvector<2,double>::t
-Perlin::get_coordinates(int nrows, int ncols,
-												ndvector<1,double>::t x_lim,
-												ndvector<1,double>::t y_lim)
+Perlin::get_coordinates(int const &nrows, int const &ncols,
+												ndvector<1,double>::t const &x_lim,
+												ndvector<1,double>::t const &y_lim)
 {
 	// Declaration of the coordinate grid
-	ndvector<2,double>::t coordinates (nrows * ncols);
+	ndvector<2,double>::t coords (nrows * ncols);
 	
 	// Calculate stepsize in each direction
 	double x_step = (x_lim[1] - x_lim[0]) / ncols; // X direction perp. to cols
@@ -39,16 +39,26 @@ Perlin::get_coordinates(int nrows, int ncols,
 	{
 		for(int j = 0; j < ncols; j++)
 		{
-			coordinates[i * ncols + j] = {j*x_step, i*y_step};
+			coords[i * ncols + j] = {j*x_step, i*y_step};
 		}
 	}
 
-	return(coordinates);
+	return(coords);
 }
+
+// Return a 2D vector with a given `phi` argument
+ndvector<1,double>::t
+Perlin::get_gradient(double const &phi)
+{
+	ndvector<1,double>::t gradient {sin(phi), cos(phi)};
+
+	return(gradient);
+}
+
 
 // Create the grid-cells
 ndvector<2,int>::t
-Perlin::create_cells(int nrows, int ncols)
+Perlin::create_cells(int const &nrows, int const &ncols)
 {
 	// Number of cells in each rows and columns
 	int crows = nrows - 1;
@@ -81,8 +91,8 @@ Perlin::create_cells(int nrows, int ncols)
 
 // Create sub-cells in which dot products are evaluated
 ndvector<3,double>::t
-Perlin::create_sub_grid(int res,
-												ndvector<2,double>::t const &coordinates,
+Perlin::create_sub_grid(int const &res,
+												ndvector<2,double>::t const &coords,
 												ndvector<2,int>::t const &cells)
 {
 	// Placeholder for the subcells
@@ -100,10 +110,10 @@ Perlin::create_sub_grid(int res,
 	for(std::size_t i = 0; i < cells.size(); i++)
 	{
 		// Identify coordinates of the current cell's borders
-		double x_min = coordinates[cells[i][0]][0]; // x_min from bottom left corner
-		double y_min = coordinates[cells[i][0]][1]; // y_min from bottom left corner
-		double x_max = coordinates[cells[i][3]][0]; // x_max from upper right corner
-		double y_max = coordinates[cells[i][3]][1]; // y_max from upper right corner
+		double x_min = coords[cells[i][0]][0]; // x_min from bottom left corner
+		double y_min = coords[cells[i][0]][1]; // y_min from bottom left corner
+		double x_max = coords[cells[i][3]][0]; // x_max from upper right corner
+		double y_max = coords[cells[i][3]][1]; // y_max from upper right corner
 
 		// Iterate over the corners of the current cell
 		// j : index of the `i`-th cell's corner
@@ -144,20 +154,10 @@ Perlin::create_sub_grid(int res,
 }
 
 
-// Return a 2D vector with a given `phi` argument
-ndvector<1,double>::t
-Perlin::get_gradient(double phi)
-{
-	ndvector<1,double>::t gradient {sin(phi), cos(phi)};
-
-	return(gradient);
-}
-
-
 // Create a discrete vector field of vectors with randomly choosen
 // arguments. Vectors are situated in each gridpoints.
 ndvector<2,double>::t
-Perlin::get_gradient_field(int nrows, int ncols)
+Perlin::get_gradient_field(int const &nrows, int const &ncols)
 {
 	// Initialize the Mersenne-Twister RNG to choose
 	// values from a uniform distribution between 0 and 2pi
@@ -182,8 +182,8 @@ Perlin::get_gradient_field(int nrows, int ncols)
 // Calculate the dot product between the generated vector field in every
 // corner of the grid cells.
 ndvector<2,double>::t
-Perlin::get_dist_vector_field(int res,
-															ndvector<2,double>::t const &coordinates,
+Perlin::get_dist_vector_field(int const &res,
+															ndvector<2,double>::t const &coords,
 															ndvector<2,int>::t const &cells)
 {
 	// Placeholder for the distance matrix. Contains the difference of
@@ -193,7 +193,7 @@ Perlin::get_dist_vector_field(int res,
 																ndvector<1,double>::t (2)
 															);
 	auto sub_grid = create_sub_grid(res,
-																	coordinates, cells);
+																	coords, cells);
 
 	// Calculate distance vectors
 	// First iterate over cells
@@ -206,7 +206,7 @@ Perlin::get_dist_vector_field(int res,
 			// Identify the current cell's corners
 			int j = floor((int)k/(res*res));
 			// Identify vectors to calculate distance between
-			auto a = coordinates[cells[i][j]];	// Closest corner's coordinates
+			auto a = coords[cells[i][j]];	// Closest corner's coordinates
 			auto b = sub_grid[i][k];						// Current sub-point's coordinates
 			ndvector<1,double>::t d (2);				// Placeholder for distance vector
 
@@ -224,7 +224,7 @@ Perlin::get_dist_vector_field(int res,
 
 
 ndvector<2,double>::t
-Perlin::get_dot_product(int nrows, int ncols, int res,
+Perlin::get_dot_product(int const &nrows, int const &ncols, int const &res,
 												ndvector<2,double>::t const &coordinates,
 												ndvector<2,int>::t const &cells,
 												ndvector<2,double>::t const &gradient_field,

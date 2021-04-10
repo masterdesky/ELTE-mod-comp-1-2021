@@ -21,16 +21,16 @@
 #include <ctime>
 
 #include <template.hpp>
-#include <generate_grid.hpp>
+#include <perlin.hpp>
 #include <io.hpp>
 
 int main(int argc, char const *argv[])
 {
-	if(argc != 4)
+	if(argc != 5)
 	{
 		std::cout << "ERROR!\n" << "------" << std::endl;
 		std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-		std::cout << "Usage: ./perlin <nrows> <ncols> <res>" << std::endl;
+		std::cout << "Usage: ./perlin <nrows> <ncols> <step> <res>" << std::endl;
 		std::cout << "Exiting..." << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -39,24 +39,28 @@ int main(int argc, char const *argv[])
 	// try to give sensible arguments when execute
 	int nrows = std::stoi(argv[1]);
 	int ncols = std::stoi(argv[2]);
+	// Size between two neighbouring grid points in any directions
+	double step = std::stoi(argv[3]);
 	// Resolution of sub-cells
 	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
-	// each
-	int res = std::stoi(argv[3]);
+	int res = std::stoi(argv[4]);
 
 	////////////////////////////////////////////////////////
 	//
 	//  I. Create the outer, main grid
 	//
 	////
-	auto grid_main = Perlin::get_coordinates(
-									 		nrows, ncols,
-									 		{0, (double)ncols}, {0, (double)nrows}
-									 );
-	PerlinIO::write_to_file<ndvector<2,double>::t>(
-			coordinates,
-			"../data/coordinates.dat"
-	);
+	Perlin perlin_1;
+	perlin_1.set_main_grid (nrows, ncols, step);
+	perlin_1.set_gradient_field (nrows, ncols);
+
+	auto main_grid = perlin_1.get_main_grid();
+	/*write_to_file<ndvector<2,double>::t> (
+			main_grid,
+			"../data/main_grid.dat"
+	);*/
+
+	/*
 	// Mark main cell borders
 	auto cells = Perlin::create_cells(nrows, ncols);
 	PerlinIO::write_to_file<ndvector<2,int>::t>(
@@ -71,7 +75,7 @@ int main(int argc, char const *argv[])
 	////
 	auto grid_sub = Perlin::create_sub_grid(
 											res,
-											coordinates, cells
+											grid_main, cells
 									);
 	//write_to_file<std::vector<double>>(sub_grid,
 	//											"sub_grid.dat");
@@ -92,7 +96,7 @@ int main(int argc, char const *argv[])
 	// Calculate the distance vectors for sub-cells
 	auto dist_vector_field = Perlin::get_dist_vector_field(
 													 		res,
-													 		coordinates, cells
+													 		grid_main, cells
 													 );
 
 	////////////////////////////////////////////////////////
@@ -108,6 +112,6 @@ int main(int argc, char const *argv[])
 	//	V. 
 	//
 	////
-
+	*/
 	return 0;
 }
