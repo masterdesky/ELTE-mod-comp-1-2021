@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 	int nrows = std::stoi(argv[1]);
 	int ncols = std::stoi(argv[2]);
 	// Size between two neighbouring grid points in any directions
-	double step = std::stoi(argv[3]);
+	double step = std::stod(argv[3]);
 	// Resolution of sub-cells
 	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
 	int res = std::stoi(argv[4]);
@@ -53,12 +53,43 @@ int main(int argc, char const *argv[])
 	Perlin perlin_1;
 	perlin_1.set_main_grid (nrows, ncols, step);
 	perlin_1.set_gradient_field (nrows, ncols);
+	perlin_1.set_sub_grid (nrows, ncols, step, res);
+	perlin_1.set_dot_grid (nrows, ncols, step, res);
 
 	auto main_grid = perlin_1.get_main_grid();
-	/*write_to_file<ndvector<2,double>::t> (
+	write_to_file (
 			main_grid,
-			"../data/main_grid.dat"
-	);*/
+			"../data/main_grid.dat",
+			nrows, ncols
+	);
+
+	auto gradient_field = perlin_1.get_gradient_field();
+	write_to_file (
+			gradient_field,
+			"../data/gradient_field.dat",
+			nrows, ncols
+	);
+
+	auto sub_grid = perlin_1.get_sub_grid();
+	write_to_file (
+			sub_grid,
+			"../data/sub_grid.dat",
+			nrows*res, ncols*res
+	);
+
+	auto cell_corners = perlin_1.get_cell_corners();
+	write_to_file (
+			cell_corners,
+			"../data/cell_corners.dat",
+			nrows, ncols
+	);
+
+	auto dot_grid = perlin_1.get_dot_grid();
+	write_to_file (
+			dot_grid,
+			"../data/dot_grid.dat",
+			nrows*res, ncols*res
+	);
 
 	/*
 	// Mark main cell borders
@@ -67,51 +98,7 @@ int main(int argc, char const *argv[])
 			cells,
 			"../data/cells.dat"
 	);
-
-	////////////////////////////////////////////////////////
-	//
-	//  II. Create the inner, high resolution sub-grid
-	//
-	////
-	auto grid_sub = Perlin::create_sub_grid(
-											res,
-											grid_main, cells
-									);
-	//write_to_file<std::vector<double>>(sub_grid,
-	//											"sub_grid.dat");
-
-	////////////////////////////////////////////////////////
-	//
-	//  III. Create the initial gradient field
-	//
-	////
-	auto gradient_field = Perlin::get_gradient_field(
-														nrows, ncols
-												);
-	PerlinIO::write_to_file<ndvector<2,double>::t>(
-			gradient_field,
-			"../data/gradient_field.txt"
-	);
-
-	// Calculate the distance vectors for sub-cells
-	auto dist_vector_field = Perlin::get_dist_vector_field(
-													 		res,
-													 		grid_main, cells
-													 );
-
-	////////////////////////////////////////////////////////
-	//
-	//  IV. Calculate the dot products for all the
-	//      sub-cell coordinates
-	//
-	////
-
-
-	////////////////////////////////////////////////////////
-	//
-	//	V. 
-	//
-	////
 	*/
+
 	return 0;
 }

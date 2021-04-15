@@ -35,9 +35,6 @@ class Perlin {
 	All return values are explicitly defined to serve a clearer understanding.
 	*/
 	private:
-		int nrows, ncols;
-		double step, res;
-
 		// Direction vectors of the low resolution main grid
 		ndvector<2,double>::t _main_grid;
 		// Randomly set vectors in the grid points of the main grid
@@ -46,10 +43,12 @@ class Perlin {
 		// For every quarter cell in the main grid, it assigns a small, high
 		// resolution grid. This means, there are S=(nrows-1)*(ncols-1)*4 number of
 		// these sub grids
-		ndvector<3,double>::t _sub_grid;
+		ndvector<2,double>::t _sub_grid;
+		// Indices of the main grid points in cell corners per cells
+		ndvector<2,int>::t _cell_corners;
 		// The field containing dot products of the sub grid and main grid vectors
 		// in every grid points of the high resolution sub grid
-		ndvector<1,double>::t _dot_grid;
+		ndvector<2,double>::t _dot_grid;
 
 
 		// Generate the a coordinate grid between given limits
@@ -60,27 +59,22 @@ class Perlin {
 		ndvector<1,double>::t static
 		_get_gradient(double const &phi);
 
+		ndvector<2,int>::t
+		_set_cell_corners(int const &nrows, int const &ncols);
+
 	public:
 		// Constructors, destructors
 		Perlin() { /* Default constructor */ }
-		Perlin(int &nr, int &nc, double &s, int &r)
+		Perlin(int &nrows, int &ncols, double &step, int &res)
 		{
 			/* Standard constructor of the Perlin class. */
-			set_parameters(nr, nc, s, r)
 			set_main_grid(nrows, ncols, step);
 			set_gradient_field(nrows, ncols);
+			set_sub_grid(nrows, ncols, step, res);
+			set_dot_grid(nrows, ncols, step, res);
 		}
 
 		~Perlin() { std::cout << "Perlin ok." << std::endl; }
-
-		// Set basic parameters
-		void set_parameters(int const &nr, int const &nc, double const &s, double const &r)
-		{
-			nrows = nr;
-			ncols = nc;
-			step = s;
-			res = r;
-		}
 
 		// Public methods
 		void set_main_grid(int const &nrows, int const &ncols, double const &step);
@@ -89,37 +83,10 @@ class Perlin {
 		void set_gradient_field(int const &nrows, int const &ncols);
 		ndvector<2,double>::t get_gradient_field() { return _gradient_field; }
 
-		void set_sub_grid()
-		ndvector<3,double>::t get_sub_grid{ return _sub_grid; }
-		
+		void set_sub_grid(int const &nrows, int const &ncols, double const &step, double const &res);
+		ndvector<2,double>::t get_sub_grid() { return _sub_grid; }
+		ndvector<2,int>::t get_cell_corners() { return _cell_corners; }
 
-		/*
-		// Create the grid-cells
-		create_cells(int const &nrows, int const &ncols);
-
-		// Create sub-cells in which dot products are evaluated
-		create_sub_grid(int const &res,
-										ndvector<2,double>::t const &coordinates,
-										ndvector<2,int>::t const &cells);
-
-		// Create a discrete vector field of vectors with randomly choosen
-		// arguments. Vectors are situated in each gridpoints.
-		ndvector<2,double>::t
-		get_gradient_field(int const &nrows, int const &ncols);
-
-		// Calculate the dot product between the generated vector field in every
-		// corner of the grid cells.
-		ndvector<2,double>::t
-		get_dist_vector_field(int const &res,
-													ndvector<2,double>::t const &coordinates,
-													ndvector<2,int>::t const &cells);
-
-		ndvector<2,double>::t
-		get_dot_product(int const &nrows, int const &ncols, int const &res,
-										ndvector<2,double>::t const &coordinates,
-										ndvector<2,int>::t const &cells,
-										ndvector<2,double>::t const &gradient_field,
-										ndvector<2,double>::t const &dist_vector_field);
-
-		*/
+		void set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res);
+		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
 };

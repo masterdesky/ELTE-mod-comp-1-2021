@@ -12,36 +12,48 @@
 //
 ////////////////////////////////////////////////////////
 
-template<typename T> void
-write_vec(std::vector<T> const &v,
-          std::ofstream output_file)
+void
+write_vec(std::vector<double> const &v,
+          std::ofstream &output_file)
 {
   for (auto const &value:v)
   {
-    output_file << value << std::endl;
+    output_file << value << ',';
+  }
+}
+
+void
+write_vec(std::vector<int> const &v,
+          std::ofstream &output_file)
+{
+  for (auto const &value:v)
+  {
+    output_file << value << ',';
   }
 }
 
 template<typename T> void
 write_vec(std::vector<std::vector<T>> const &v,
-          std::ofstream output_file)
+          std::ofstream &output_file)
 {
   for (auto const &value:v)
   {
-    write_vec<T>(value, output_file);
-    output_file << '\n' << std::endl;
+    write_vec(value, output_file);
+    output_file << '\n';
   }
 }
 
 template <typename T> void
 write_to_file(T const &table,
-              std::string filename)
+              std::string filename, int const &nrows, int const &ncols)
 {
   std::ofstream output_file;
   // Save the input vector
   output_file.open(filename);
+  output_file << nrows << std::endl;
+  output_file << ncols << std::endl;
 
-  write_vec<T>(table, output_file);
+  write_vec(table, output_file);
 
   output_file.close();
 }
