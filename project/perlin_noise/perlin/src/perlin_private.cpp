@@ -55,8 +55,8 @@ ndvector<2,int>::t
 Perlin::_set_cell_corners(int const &nrows, int const &ncols)
 {
   // Number of cells in each rows and columns
-  int crows = nrows;
-  int ccols = ncols;
+  int crows = nrows - 1;
+  int ccols = ncols - 1;
   ndvector<2,int>::t cell_corners (crows * ccols);
 
   // Iterate over all points, except the last row and the last column.
@@ -80,4 +80,21 @@ Perlin::_set_cell_corners(int const &nrows, int const &ncols)
   }
 
   return(cell_corners);
+}
+
+double
+Perlin::_interpolate(double const &d0, double const &d1, double const &w) {
+  /*
+
+  Value of the weight `w` should be in the interval [0,1]
+  */
+
+  // Simple interpolation between two values
+  //return( (d1 - d0) * w + d0 );
+
+  // Use this cubic interpolation [[Smoothstep]] instead, for a smooth appearance:
+  //return( (d1 - d0) * (3.0 - w * 2.0) * w * w + d0 );
+
+  // Use [[Smootherstep]] for an even smoother result with a second derivative equal to zero on boundaries:
+  return( (d1 - d0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + d0 );
 }

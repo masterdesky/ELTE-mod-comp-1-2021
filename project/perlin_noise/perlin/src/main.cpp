@@ -55,6 +55,7 @@ int main(int argc, char const *argv[])
 	perlin_1.set_gradient_field (nrows, ncols);
 	perlin_1.set_sub_grid (nrows, ncols, step, res);
 	perlin_1.set_dot_grid (nrows, ncols, step, res);
+	perlin_1.set_interp_grid (nrows, ncols, res);
 
 	auto main_grid = perlin_1.get_main_grid();
 	write_to_file (
@@ -74,7 +75,7 @@ int main(int argc, char const *argv[])
 	write_to_file (
 			sub_grid,
 			"../data/sub_grid.dat",
-			nrows*res, ncols*res
+			(nrows-1)*res+1, (ncols-1)*res+1
 	);
 
 	auto cell_corners = perlin_1.get_cell_corners();
@@ -88,17 +89,22 @@ int main(int argc, char const *argv[])
 	write_to_file (
 			dot_grid,
 			"../data/dot_grid.dat",
-			nrows*res, ncols*res
+			(nrows-1)*res+1, (ncols-1)*res+1
 	);
 
-	/*
-	// Mark main cell borders
-	auto cells = Perlin::create_cells(nrows, ncols);
-	PerlinIO::write_to_file<ndvector<2,int>::t>(
-			cells,
-			"../data/cells.dat"
+	auto ngp = perlin_1.get_ngp();
+	write_to_file (
+			ngp,
+			"../data/ngp.dat",
+			(nrows-1)*res+1, (ncols-1)*res+1
 	);
-	*/
+
+	auto interp_grid = perlin_1.get_interp_grid();
+	write_to_file (
+			interp_grid,
+			"../data/interp_grid.dat",
+			(nrows-1)*res+1, (ncols-1)*res+1
+	);
 
 	return 0;
 }

@@ -1,6 +1,7 @@
 # Ignore bins and objects
 **/bin
 **/obj
+**/data
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

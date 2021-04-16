@@ -46,9 +46,13 @@ class Perlin {
 		ndvector<2,double>::t _sub_grid;
 		// Indices of the main grid points in cell corners per cells
 		ndvector<2,int>::t _cell_corners;
+		// List of nearest cell corners to a sub grid point
+		ndvector<1,int>::t _ngp;
 		// The field containing dot products of the sub grid and main grid vectors
 		// in every grid points of the high resolution sub grid
 		ndvector<2,double>::t _dot_grid;
+		// The interpolated grid which will be the final
+		ndvector<1,double>::t _interp_grid;
 
 
 		// Generate the a coordinate grid between given limits
@@ -62,8 +66,11 @@ class Perlin {
 		ndvector<2,int>::t
 		_set_cell_corners(int const &nrows, int const &ncols);
 
+		double
+		_interpolate(double const &d0, double const &d1, double const &w);
+
 	public:
-		// Constructors, destructors
+		/* Constructors, destructors */
 		Perlin() { /* Default constructor */ }
 		Perlin(int &nrows, int &ncols, double &step, int &res)
 		{
@@ -72,11 +79,13 @@ class Perlin {
 			set_gradient_field(nrows, ncols);
 			set_sub_grid(nrows, ncols, step, res);
 			set_dot_grid(nrows, ncols, step, res);
+			set_interp_grid(nrows, ncols, res);
 		}
 
 		~Perlin() { std::cout << "Perlin ok." << std::endl; }
 
-		// Public methods
+		/* Public methods */
+
 		void set_main_grid(int const &nrows, int const &ncols, double const &step);
 		ndvector<2,double>::t get_main_grid() { return _main_grid; }
 
@@ -89,4 +98,8 @@ class Perlin {
 
 		void set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res);
 		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
+		ndvector<1,int>::t get_ngp() { return _ngp; }
+
+		void set_interp_grid(int const &nrows, int const &ncols, double const &res);
+		ndvector<1,double>::t get_interp_grid() { return _interp_grid; }
 };
