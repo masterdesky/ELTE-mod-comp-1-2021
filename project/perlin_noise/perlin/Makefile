@@ -8,10 +8,10 @@ OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
 LIBS			=	-lm
 
-_DEPS		=	template.hpp perlin.hpp io.hpp
+_DEPS		=	template.hpp perlin.hpp io.hpp perlin_io.hpp particle.hpp
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o perlin_private.o perlin_public.o
+_OBJ		=	main.o perlin_private.o perlin_public.o particle.o
 OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 

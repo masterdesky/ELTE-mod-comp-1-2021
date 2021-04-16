@@ -82,6 +82,19 @@ Perlin::_set_cell_corners(int const &nrows, int const &ncols)
   return(cell_corners);
 }
 
+ndvector<1,int>::t
+Perlin::_get_current_cell(ndvector<1,double>::t const &p, int const &nrows, int const &ncols, double const &step)
+{
+  // Indices of the current cell
+  int ix = (int)(p[0] / step);
+  int iy = (int)(p[1] / step);
+  // Correct for points on borders
+  if(ix == ncols-1) { ix = ncols-2; }
+  if(iy == nrows-1) { iy = nrows-2; }
+
+  return(_cell_corners[iy * (ncols-1) + ix]);
+}
+
 double
 Perlin::_interpolate(double const &d0, double const &d1, double const &w) {
   /*

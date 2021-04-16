@@ -23,6 +23,8 @@
 #include <template.hpp>
 #include <perlin.hpp>
 #include <io.hpp>
+#include <perlin_io.hpp>
+#include <particle.hpp>
 
 int main(int argc, char const *argv[])
 {
@@ -37,74 +39,39 @@ int main(int argc, char const *argv[])
 
 	// Currently does not check for valid input, please
 	// try to give sensible arguments when execute
-	int nrows = std::stoi(argv[1]);
-	int ncols = std::stoi(argv[2]);
+	int nrows_0 = std::stoi(argv[1]);
+	int ncols_0 = std::stoi(argv[2]);
 	// Size between two neighbouring grid points in any directions
-	double step = std::stod(argv[3]);
+	double step_0 = std::stod(argv[3]);
 	// Resolution of sub-cells
 	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
-	int res = std::stoi(argv[4]);
+	int res_0 = std::stoi(argv[4]);
 
-	////////////////////////////////////////////////////////
-	//
-	//  I. Create the outer, main grid
-	//
-	////
+	// Declare running parameters in the simulation
+	int nrows;
+	int ncols;
+	double step;
+	int res;
+
 	Perlin perlin_1;
+	nrows = nrows_0 * 1;
+	ncols = ncols_0 * 1;
+	step = step_0 / 1;
+	res = res_0 / 1;
 	perlin_1.set_main_grid (nrows, ncols, step);
 	perlin_1.set_gradient_field (nrows, ncols);
 	perlin_1.set_sub_grid (nrows, ncols, step, res);
 	perlin_1.set_dot_grid (nrows, ncols, step, res);
-	perlin_1.set_interp_grid (nrows, ncols, res);
+	perlin_1.set_interp_grid (nrows, ncols, step, res);
+	perlin_1.set_sub_grad_field (nrows, ncols, res);
 
-	auto main_grid = perlin_1.get_main_grid();
-	write_to_file (
-			main_grid,
-			"../data/main_grid.dat",
-			nrows, ncols
-	);
+	//save_perlin(perlin_1, nrows, ncols, step, res, "1");
 
-	auto gradient_field = perlin_1.get_gradient_field();
-	write_to_file (
-			gradient_field,
-			"../data/gradient_field.dat",
-			nrows, ncols
-	);
-
-	auto sub_grid = perlin_1.get_sub_grid();
-	write_to_file (
-			sub_grid,
-			"../data/sub_grid.dat",
-			(nrows-1)*res+1, (ncols-1)*res+1
-	);
-
-	auto cell_corners = perlin_1.get_cell_corners();
-	write_to_file (
-			cell_corners,
-			"../data/cell_corners.dat",
-			nrows, ncols
-	);
-
-	auto dot_grid = perlin_1.get_dot_grid();
-	write_to_file (
-			dot_grid,
-			"../data/dot_grid.dat",
-			(nrows-1)*res+1, (ncols-1)*res+1
-	);
-
-	auto ngp = perlin_1.get_ngp();
-	write_to_file (
-			ngp,
-			"../data/ngp.dat",
-			(nrows-1)*res+1, (ncols-1)*res+1
-	);
-
-	auto interp_grid = perlin_1.get_interp_grid();
-	write_to_file (
-			interp_grid,
-			"../data/interp_grid.dat",
-			(nrows-1)*res+1, (ncols-1)*res+1
-	);
+	int npart = 50;
+	Particle particle;
+	particle.set_starting_positions(perlin_1, npart);
+	Particle particle;
+	particle.set_starting_positions(perlin_1, npart, nrows, ncols);
 
 	return 0;
 }
