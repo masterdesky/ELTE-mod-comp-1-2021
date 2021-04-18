@@ -178,14 +178,16 @@ Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &step, 
 void
 Perlin::set_sub_grad_field(int const &nrows, int const &ncols, double const &res)
 {
-  // Placeholder for the gradient field of the sub grid points
-  ndvector<2,int>::t tmp_grad_field (
+  // Placeholder for the zero padded gradient field of the sub grid points
+  ndvector<2,int>::t pad_grad_field (
                                       ((nrows-1)*res+3) * ((ncols-1)*res+3),
                                       ndvector<1,int>::t (2)
-                                   );
-  ndvector<1,double>::t pad_interp_grid (((ncols-1)*res+3) * ((nrows-1)*res+3),
-                                         -999);
+                                    );
+  // Placeholder for the zero padded interpolated grod
+  ndvector<1,double>::t pad_interp_grid (((ncols-1)*res+3) * ((nrows-1)*res+3), -1);
 
+  // Create the zero padded version of the interpolated grid by inserting the
+  // original interpolated grid inside the zero padded one
   for(int i = 1; i < (nrows-1)*res+2; i++)
   {
     for(int j = 1; j < (ncols-1)*res+2; j++)
@@ -196,6 +198,7 @@ Perlin::set_sub_grad_field(int const &nrows, int const &ncols, double const &res
     }
   }
 
+  // Determine gradients in the interpolated grid for every sub grid point
   //
   // OH MY GOD PLEASE FORGIVE ME FOR THIS ABOMINATION
   //
@@ -212,7 +215,11 @@ Perlin::set_sub_grad_field(int const &nrows, int const &ncols, double const &res
       {
         for(int cx = -1; cx <= 1; cx++)
         {
-          if(cx != cy)
+          if(cx == 0 && cy == 0)
+          {
+            continue;
+          }
+          else
           {
             int cidx = (i+cy) * ((ncols-1)*res+3) + (j+cx);
             double pc = pad_interp_grid[cidx];
@@ -226,21 +233,27 @@ Perlin::set_sub_grad_field(int const &nrows, int const &ncols, double const &res
         }
       }
       // Adding gradient to sub gradient field
-      tmp_grad_field[pidx] = grad;
+      pad_grad_field[pidx] = grad;
     }
   }
 
+  // Placeholder for the sub gradient field without zero padding
   ndvector<2,int>::t sub_grad_field (
                                       ((nrows-1)*res+1) * ((ncols-1)*res+1),
                                       ndvector<1,int>::t (2)
                                     );
+
+  // Remove zero padding from the sub gradient field
   for(int i = 1; i < (nrows-1)*res+2; i++)
   {
     for(int j = 1; j < (ncols-1)*res+2; j++)
     {
       int idx = (i-1) * ((ncols-1)*res+1) + (j-1);
       int pidx = i * ((ncols-1)*res+3) + j;
-      sub_grad_field[idx] = tmp_grad_field[pidx];
+      sub_grad_field[idx] = pad_grad_field[pidx];
+      //std::cout << "pidx = " << pidx << std::endl;
+      //std::cout << "grads = " << pad_grad_field[pidx][0] << ","
+      //                        << pad_grad_field[pidx][1] << std::endl;
     }
   }
 

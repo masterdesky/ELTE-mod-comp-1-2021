@@ -67,11 +67,10 @@ int main(int argc, char const *argv[])
 
 	//save_perlin(perlin_1, nrows, ncols, step, res, "1");
 
-	int npart = 50;
+	int npart = 2;
 	Particle particle;
 	particle.set_starting_positions(perlin_1, npart);
-	Particle particle;
-	particle.set_starting_positions(perlin_1, npart, nrows, ncols);
+	particle.trace_particles(perlin_1, npart, nrows, ncols, res);
 
 	return 0;
 }

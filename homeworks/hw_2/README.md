@@ -1,3 +1,3 @@
-# First homework
+# Second homework
 
-In this homework we had to implement the Newton-Raphson method, which could be used to find the roots of real-valued functions.
+In this homework we had to implement a custom vector class with operator overloading and custom methods.
