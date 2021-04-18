@@ -8,10 +8,10 @@ OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
 LDFLAGS		=	-lm
 
-_DEPS		=	string.hpp
+_DEPS		=	string.hpp vector.hpp integrate.hpp richardson.hpp
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o string_private.o string_public.o
+_OBJ		=	main.o string_public.o
 OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)

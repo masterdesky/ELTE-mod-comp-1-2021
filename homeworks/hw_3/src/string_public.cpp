@@ -11,27 +11,43 @@
 //
 ////////////////////////////////////////////////////////
 
+#include <math.h>
 #include <vector>
 
 #include <string.hpp>
+#include <richardson.hpp>
 
-std::vector<double>
-String::sample(std::vector<double> const &X)
+double
+String::f(double const &x)
+{
+  return F/q * ( cosh(q/F * x) - cosh(q*b / 2 / F) ) + h;
+}
+
+double
+String::fprime(double const &x)
 {
   /*
-  Samples N points from the values of the curve.
+  Calculates the prime of a function at location `x` using 
   */
-  int N = static_cast<int>(X.size());
+  // Determine the step size between sampling points
+  double step = (b-a) / (N-1);
 
-  // Placeholder for the sampled values
-  std::vector<double> Y (N);
+  return R_6(*this, x, step);
+}
 
-  int t = 0;
-  for(auto const &x_i : std::as_const(X))
-  {
-    Y[t] = _get_value(x_i);
-    t++;
-  }
+double
+String::dL(double const &x)
+{
+  /*
+  Calculates the length of the unit line segment.
 
-  return Y;
+  dL = sqrt( 1 + f'(x)^2 )
+
+  The derivatives are approximated using the 6th order Richardson method
+  */
+
+  double Fprime = fprime(x);
+  double dL = sqrt( 1 + Fprime*Fprime );
+
+  return dL;
 }

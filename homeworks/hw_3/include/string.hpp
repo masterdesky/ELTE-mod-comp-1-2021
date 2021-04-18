@@ -20,19 +20,27 @@ class String {
     double F;
     double q;
     double a;
+    double b;
     double h;
-
-    double _get_value(double const &x);
+    int N;
 
   public:
     /* Constructors and deconstructors */
     //String() { /* Default constructor */ }
-    String(double const &Fi, double const &qi, double const &ai, double const &hi)
-    : F(Fi), q(qi), a(ai), h(hi)
+    String(double const &Fi, double const &qi, double const &ai,
+           double const &bi, double const &hi, int const &n)
+    : F(Fi), q(qi), a(ai), b(bi), h(hi), N(n)
     {}
 
-    ~String() { std::cout << "String destructor called" << std::endl; }
+    //~String() { std::cout << "String destructor called" << std::endl; }
 
-    std::vector<double> sample(std::vector<double> const &X);
+    // The value of the curve at a specific point
+    double f(double const &x);
+
+    // The value of the derivative of the curve at a specific point
+    double fprime(double const &x);
+
+    // The length of the unit line segment on the curve
+    double dL(double const &x);
 
 };
