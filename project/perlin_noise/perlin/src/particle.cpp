@@ -80,46 +80,10 @@ void
 Particle::trace_particles(Perlin perlin,
                           int const &npart, int const &nrows, int const &ncols, int const &res)
 {
+  auto sub_cell_corners = perlin.get_sub_cell_corners();
   auto sub_grad_field = perlin.get_sub_grad_field();
   for(int p = 0; p < npart; p++)
   {
-    // Placeholder for the position vector to trace the particle `p`
-    ndvector<1,int>::t pos;
-
-    int t = 1;
-    int r = _positions[p][0];
-    pos.push_back(r);
-    int x = (int)(r / ((nrows-1)*res+1));
-    int y = r % ((nrows-1)*res+1);
-
-    std::cout << "r : " << r << std::endl;
-    std::cout << "coords : (" << x << "," << y << ")" << std::endl;
-
-    auto g = sub_grad_field[r];
-    while(x != 0 || y != 0 || x != (ncols-1)*res+1 || y != (nrows-1)*res+1)
-    {
-      if(g[0] == 0 && g[1] == 0)
-      {
-        std::cout << "GRADIENT IS 0!!" << std::endl;
-        std::cout << "r : " << r << std::endl;
-        std::cout << "coords : (" << x << "," << y << ")" << std::endl;
-        break;
-      }
-
-      if(t % 1 == 0)
-      {
-        std::cout << "t = " << t << std::endl;
-        std::cout << "g = " << g[0] << "," << g[1] << std::endl;
-      }
-
-      x += g[0];
-      y += g[1];
-      r = y*(ncols-1)*res+1 + x;
-      g = sub_grad_field[r];
-      pos.push_back(r);
-      t++;
-    }
-    std::cout << "t_final = " << t << std::endl;
-    _positions[p] = pos;
+    
   }
 }

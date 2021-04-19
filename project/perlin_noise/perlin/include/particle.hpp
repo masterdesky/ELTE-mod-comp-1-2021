@@ -19,8 +19,8 @@
 class Particle {
   private:
     // X and Y coordinates of the particles
-    ndvector<2,double>::t _positions_x;
-    ndvector<2,double>::t _positions_y;
+    ndvector<3,double>::t _positions;
+    ndvector<3,double>::t _velocities;
 
     /* Private methods */
     // Methods to sample uniformly `npart` number of random integers from a set

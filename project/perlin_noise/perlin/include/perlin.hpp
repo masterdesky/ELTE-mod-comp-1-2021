@@ -46,6 +46,8 @@ class Perlin {
 		ndvector<2,double>::t _sub_grid;
 		// Indices of the main grid points in cell corners per cells
 		ndvector<2,int>::t _cell_corners;
+		// Indices of the sub grid points in cell corners per cells
+		ndvector<2,int>::t _sub_cell_corners;
 		// Distance vector field
 		ndvector<3,double>::t _dist_field;
 		// The field containing dot products of the sub grid and main grid vectors
@@ -70,6 +72,9 @@ class Perlin {
 
 		ndvector<2,int>::t
 		_set_cell_corners(int const &nrows, int const &ncols);
+
+		ndvector<2,int>::t
+		_set_sub_cell_corners(int const &nrows, int const &ncols, int &res);
 
 		ndvector<1,int>::t
 		_get_current_cell(ndvector<1,double>::t const &p, int const &nrows, int const &ncols, double const &step);
@@ -103,6 +108,7 @@ class Perlin {
 		void set_sub_grid(int const &nrows, int const &ncols, double const &step, double const &res);
 		ndvector<2,double>::t get_sub_grid() { return _sub_grid; }
 		ndvector<2,int>::t get_cell_corners() { return _cell_corners; }
+		ndvector<2,int>::t get_sub_cell_corners() { return _sub_cell_corners; }
 
 		void set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res);
 		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
