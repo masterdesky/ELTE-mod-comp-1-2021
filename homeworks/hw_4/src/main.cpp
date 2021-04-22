@@ -48,7 +48,8 @@ int main(int argc, char const *argv[])
     else if(intg == "r") { RK4Step(Y, dx, f_prime); }
     else if(intg == "rk") { RKCKStep(Y, dx, f_prime); }
     else if(intg == "rkf") { RKFStep(Y, dx, f_prime); }
-    else { std::cout << "get fucked" << std::endl; break; }
+    else { std::cout << "Please use 'r', 'e', 'rk' or 'rkf' as third argument!"
+                     << std::endl; break; }
     std::cout << Y << std::endl;
   } while(Y[0] < x_max);
 
