@@ -62,6 +62,7 @@ Perlin::set_sub_grid(int const &nrows, int const &ncols, double const &step, dou
   double sub_step = step/res;
   _sub_grid = _get_coordinates((nrows-1)*res+1, (ncols-1)*res+1, sub_step);
   _cell_corners = _set_cell_corners(nrows, ncols);
+  _sub_cell_corners = _set_sub_cell_corners(nrows, ncols, res);
 }
 
 // Get the dot product of the sub grid vectors and the nearest main grid vectors

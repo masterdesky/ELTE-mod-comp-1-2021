@@ -44,16 +44,16 @@ class Perlin {
 		// resolution grid. This means, there are S=(nrows-1)*(ncols-1)*4 number of
 		// these sub grids
 		ndvector<2,double>::t _sub_grid;
-		// Indices of the main grid points in cell corners per cells
+		// Indices of the main grid points in main cell corners per cells
 		ndvector<2,int>::t _cell_corners;
-		// Indices of the sub grid points in cell corners per cells
+		// Indices of the sub grid points in sub cell corners per cells
 		ndvector<2,int>::t _sub_cell_corners;
 		// Distance vector field
 		ndvector<3,double>::t _dist_field;
 		// The field containing dot products of the sub grid and main grid vectors
 		// in every grid points of the high resolution sub grid
 		ndvector<2,double>::t _dot_grid;
-		// List of nearest cell corners to a sub grid point
+		// List of nearest main cell corners to a sub grid point
 		ndvector<1,int>::t _ngp;
 		// The interpolated grid which will be the final
 		ndvector<1,double>::t _interp_grid;
@@ -74,10 +74,16 @@ class Perlin {
 		_set_cell_corners(int const &nrows, int const &ncols);
 
 		ndvector<2,int>::t
-		_set_sub_cell_corners(int const &nrows, int const &ncols, int &res);
+		_set_sub_cell_corners(int const &nrows, int const &ncols, int const &res);
+
 
 		ndvector<1,int>::t
-		_get_current_cell(ndvector<1,double>::t const &p, int const &nrows, int const &ncols, double const &step);
+		_get_current_cell(ndvector<1,double>::t const &p,
+											int const &nrows, int const &ncols, double const &step);
+
+		ndvector<1,int>::t
+		_get_current_sub_cell(ndvector<1,double>::t const &p,
+                          int const &nrows, int const &ncols, double const &step, int const &res);
 
 		double
 		_interpolate(double const &d0, double const &d1, double const &w);

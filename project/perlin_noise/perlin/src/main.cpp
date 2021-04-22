@@ -28,11 +28,11 @@
 
 int main(int argc, char const *argv[])
 {
-	if(argc != 5)
+	if(argc != 4)
 	{
 		std::cout << "ERROR!\n" << "------" << std::endl;
 		std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-		std::cout << "Usage: ./perlin <nrows> <ncols> <step> <res>" << std::endl;
+		std::cout << "Usage: ./perlin <nrows> <ncols> <res>" << std::endl;
 		std::cout << "Exiting..." << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -42,12 +42,12 @@ int main(int argc, char const *argv[])
 	int nrows_0 = std::stoi(argv[1]);
 	int ncols_0 = std::stoi(argv[2]);
 	// Size between two neighbouring grid points in any directions
-	double step_0 = std::stod(argv[3]);
+	double step_0 = 1.0;
 	// Resolution of sub-cells
 	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
-	int res_0 = std::stoi(argv[4]);
+	int res_0 = std::stoi(argv[3]);
 
-	// Declare running parameters in the simulation
+	// Declare changing hyperparameters in the simulation
 	int nrows;
 	int ncols;
 	double step;
@@ -68,9 +68,11 @@ int main(int argc, char const *argv[])
 	//save_perlin(perlin_1, nrows, ncols, step, res, "1");
 
 	int npart = 2;
+	double T = 1;
+	double dt = 1e-04;
 	Particle particle;
-	particle.set_starting_positions(perlin_1, npart);
-	particle.trace_particles(perlin_1, npart, nrows, ncols, res);
+	particle.set_starting_positions(npart, nrows, ncols, step);
+	particle.trace_particles(perlin_1, npart, nrows, ncols, res, T, dt);
 
 	return 0;
 }

@@ -50,7 +50,7 @@ Perlin::_get_gradient(double const &phi)
   return(gradient);
 }
 
-// Get indices of the main grid points in cell corners per cells
+// Get indices of the main grid points in main cell corners per cells
 ndvector<2,int>::t
 Perlin::_set_cell_corners(int const &nrows, int const &ncols)
 {
@@ -82,8 +82,41 @@ Perlin::_set_cell_corners(int const &nrows, int const &ncols)
   return(cell_corners);
 }
 
+// Get indices of the sub grid points in sub cell corners per cells
+ndvector<2,int>::t
+Perlin::_set_sub_cell_corners(int const &nrows, int const &ncols, int const &res)
+{
+  // Number of cells in each rows and columns
+  int crows = (nrows - 1)*res;
+  int ccols = (ncols - 1)*res;
+  ndvector<2,int>::t sub_cell_corners (crows * ccols);
+
+  // Iterate over all points, except the last row and the last column.
+  // The iteration is basically over the possible upper left corners for a cell.
+  for(int i = 0; i < crows; i++)
+  {
+    for(int j = 0; j < ccols; j++)
+    {
+      int idx = i * ccols + j; // Index for cells
+      int c = i * ncols + j;   // Index for coordinates
+      
+      // Gather the coordinates of cell's corners.
+      // Coordinates are in the upper right quarter of the coordinate system
+      // and they're situated in the following order in the `sub_cell_corners` vector:
+      // 1: Bottom left
+      // 2: Bottom right
+      // 3: Upper left
+      // 4: Upper right
+      sub_cell_corners[idx] = {c, c+1, c+ncols, c+ncols+1};
+    }
+  }
+
+  return(sub_cell_corners);
+}
+
 ndvector<1,int>::t
-Perlin::_get_current_cell(ndvector<1,double>::t const &p, int const &nrows, int const &ncols, double const &step)
+Perlin::_get_current_cell(ndvector<1,double>::t const &p,
+                          int const &nrows, int const &ncols, double const &step)
 {
   // Indices of the current cell
   int ix = (int)(p[0] / step);
@@ -93,6 +126,20 @@ Perlin::_get_current_cell(ndvector<1,double>::t const &p, int const &nrows, int 
   if(iy == nrows-1) { iy = nrows-2; }
 
   return(_cell_corners[iy * (ncols-1) + ix]);
+}
+
+ndvector<1,int>::t
+Perlin::_get_current_sub_cell(ndvector<1,double>::t const &p,
+                              int const &nrows, int const &ncols, double const &step, int const &res)
+{
+  // Indices of the current cell
+  int ix = (int)(p[0] / step);
+  int iy = (int)(p[1] / step);
+  // Correct for points on borders
+  if(ix == (ncols-1)*res) { ix = (ncols-1)*res-1; }
+  if(iy == (nrows-1)*res) { iy = (nrows-1)*res-1; }
+
+  return(_sub_cell_corners[iy * ((ncols-1)*res-1) + ix]);
 }
 
 double
@@ -105,9 +152,10 @@ Perlin::_interpolate(double const &d0, double const &d1, double const &w) {
   // Simple interpolation between two values
   //return( (d1 - d0) * w + d0 );
 
-  // Use this cubic interpolation [[Smoothstep]] instead, for a smooth appearance:
+  // Use this cubic interpolation [[Smoothstep]] instead, for a smooth appearance
   //return( (d1 - d0) * (3.0 - w * 2.0) * w * w + d0 );
 
-  // Use [[Smootherstep]] for an even smoother result with a second derivative equal to zero on boundaries:
+  // Use [[Smootherstep]] for an even smoother result with a second derivative
+  // equal to zero on boundaries
   return( (d1 - d0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + d0 );
 }

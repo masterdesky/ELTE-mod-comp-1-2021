@@ -14,26 +14,28 @@
 ////////////////////////////////////////////////////////
 
 #include <random>
-#include <unordered_set>
 
 class Particle {
   private:
     // X and Y coordinates of the particles
-    ndvector<3,double>::t _positions;
-    ndvector<3,double>::t _velocities;
+    ndvector<2,double>::t _positions;
+    ndvector<2,double>::t _velocities;
 
     /* Private methods */
     // Methods to sample uniformly `npart` number of random integers from a set
     // of `all` number integers
-    std::unordered_set<int> _pickSet(int const &allpoint, int const &npart, std::mt19937_64 &gen);
-    ndvector<1,int>::t _pick(int const &allpoint, int const &npart);
+    double _pick_value(std::mt19937_64 &gen, double const &lim);
+    ndvector<1,double>::t _pick(int const &npart, double const &lim);
 
   public:
     /* Constructors, destructors */
     Particle() { /* Default constructor */ }
 
     /* Public methods */
-    void set_starting_positions(Perlin perlin, int const &npart);
+    void set_starting_positions(int const &npart,
+                                int const &nrows, int const &ncols, double const &step);
 
-    void trace_particles(Perlin perlin, int const &npart, int const &nrows, int const &ncols, int const &res);
+    void trace_particles(Perlin &perlin, int const &npart,
+                         int const &nrows, int const &ncols, int const &res,
+                         double const &T, double const &dt);
 };
