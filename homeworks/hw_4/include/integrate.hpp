@@ -30,12 +30,14 @@ extern void RK4Step(
 extern void RKCKStep(
   vector2d &x,                             //  extended solution vector
   double dx,                               //  step size
-  vector2d derivates(vector2d const &x)    //  extended derivative vector
+  vector2d derivates(vector2d const &x),   //  extended derivative vector
+  vector2d &x_err                          //  error of the fit
 );
 
 // Take a single 4(5) Runge-Kutta-Fehlberg step
 extern void RKFStep(
   vector2d &x,                             //  extended solution vector
   double dx,                               //  step size
-  vector2d derivates(vector2d const &x)    //  extended derivative vector
+  vector2d derivates(vector2d const &x),   //  extended derivative vector
+  vector2d &x_err                          //  error of the fit
 );

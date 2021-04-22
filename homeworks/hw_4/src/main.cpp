@@ -39,19 +39,20 @@ int main(int argc, char const *argv[])
 
   // Starting condition (i = 0)
   vector2d Y = { 0., 0. };
-  std::cout << Y << std::endl;
+  vector2d Y_err = { 0., 0. };
+  std::cout << Y << " +- " << Y_err << std::endl;
   
   // Iteration start (i = 1)
-  do
+  while(Y[0] < x_max)
   {
     if(intg == "e") { EulerStep(Y, dx, f_prime); }
     else if(intg == "r") { RK4Step(Y, dx, f_prime); }
-    else if(intg == "rk") { RKCKStep(Y, dx, f_prime); }
-    else if(intg == "rkf") { RKFStep(Y, dx, f_prime); }
+    else if(intg == "rk") { RKCKStep(Y, dx, f_prime, Y_err); }
+    else if(intg == "rkf") { RKFStep(Y, dx, f_prime, Y_err); }
     else { std::cout << "Please use 'r', 'e', 'rk' or 'rkf' as third argument!"
                      << std::endl; break; }
-    std::cout << Y << std::endl;
-  } while(Y[0] < x_max);
+    std::cout << Y << " +- " << Y_err << std::endl;
+  }
 
   return 0;
 }

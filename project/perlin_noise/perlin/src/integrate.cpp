@@ -1,13 +1,15 @@
 ////////////////////////////////////////////////////////
 //
-//    Numerical integration
+//    Creating 2D Perlin noise art in C++ by implementing
+//    https://mrl.cs.nyu.edu/~perlin/paper445.pdf
 //
 //    File : integrate.cpp
 //    Desc : Contains the definition to the integration
-//           methods
+//           methods used for particle simulation
+//    Tabsize : 2 spaces
 //
 //    Written by Balázs Pál @ 2021
-//    For Furu and Szigety
+//    For Furu and Szigetty
 //
 ////////////////////////////////////////////////////////
 

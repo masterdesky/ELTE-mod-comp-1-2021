@@ -20,6 +20,7 @@
 #include <template.hpp>
 #include <perlin.hpp>
 #include <particle.hpp>
+#include <integrate.hpp>
 
 double
 Particle::_pick_value(std::mt19937_64 &gen, double const &lim)
