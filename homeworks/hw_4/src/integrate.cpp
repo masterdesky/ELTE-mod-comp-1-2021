@@ -13,8 +13,17 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 #include <vector.hpp>
+
+// Analytic solution
+void AnalyticStep(vector2d &x, double dx)
+{
+  double x_n1 = x[0] + dx;
+  double y_n1 = tan(x_n1);
+  x = { x_n1, y_n1 };
+}
 
 // Simple Euler
 void EulerStep(vector2d &x, double dx,
@@ -39,7 +48,7 @@ void RK4Step(vector2d &x, double dx,
 
 
 // Runge-Kutta-Cash-Karp including error estimate
-void RKCKStep(vector2d &x, double tau,
+void RKCKStep(vector2d &x, double dx,
               vector2d derivates(const vector2d&), vector2d &x_err)
 {
   // Butcher tableau of RKCK
@@ -56,12 +65,12 @@ void RKCKStep(vector2d &x, double tau,
     dc5 = c5 - 277.0/14336.0, dc6 = c6 - 1.0/4.0;
 
   vector2d
-    k1 = tau * derivates(x),
-    k2 = tau * derivates(x + b21*k1),
-    k3 = tau * derivates(x + b31*k1 + b32*k2),
-    k4 = tau * derivates(x + b41*k1 + b42*k2 + b43*k3),
-    k5 = tau * derivates(x + b51*k1 + b52*k2 + b53*k3 + b54*k4),
-    k6 = tau * derivates(x + b61*k1 + b62*k2 + b63*k3 + b64*k4 + b65*k5);
+    k1 = dx * derivates(x),
+    k2 = dx * derivates(x + b21*k1),
+    k3 = dx * derivates(x + b31*k1 + b32*k2),
+    k4 = dx * derivates(x + b41*k1 + b42*k2 + b43*k3),
+    k5 = dx * derivates(x + b51*k1 + b52*k2 + b53*k3 + b54*k4),
+    k6 = dx * derivates(x + b61*k1 + b62*k2 + b63*k3 + b64*k4 + b65*k5);
   
   x += c1*k1 + c2*k2 + c3*k3 + c4*k4 + c5*k5 + c6*k6;
   x_err = dc1*k1 + dc2*k2 + dc3*k3 + dc4*k4 + dc5*k5 + dc6*k6;
@@ -70,7 +79,7 @@ void RKCKStep(vector2d &x, double tau,
 
 // Fehlberg's 4(5) method
 // Runge-Kutta-Fehlberg including error estimate
-void RKFStep(vector2d &x, double tau,
+void RKFStep(vector2d &x, double dx,
              vector2d derivates(const vector2d&), vector2d &x_err)
 {
   // Butcher tableau of RKF
@@ -87,12 +96,12 @@ void RKFStep(vector2d &x, double tau,
     dc5 = c5 + 1.0/5.0, dc6 = c6 - 0.0;
 
   vector2d
-    k1 = tau * derivates(x),
-    k2 = tau * derivates(x + b21*k1),
-    k3 = tau * derivates(x + b31*k1 + b32*k2),
-    k4 = tau * derivates(x + b41*k1 + b42*k2 + b43*k3),
-    k5 = tau * derivates(x + b51*k1 + b52*k2 + b53*k3 + b54*k4),
-    k6 = tau * derivates(x + b61*k1 + b62*k2 + b63*k3 + b64*k4 + b65*k5);
+    k1 = dx * derivates(x),
+    k2 = dx * derivates(x + b21*k1),
+    k3 = dx * derivates(x + b31*k1 + b32*k2),
+    k4 = dx * derivates(x + b41*k1 + b42*k2 + b43*k3),
+    k5 = dx * derivates(x + b51*k1 + b52*k2 + b53*k3 + b54*k4),
+    k6 = dx * derivates(x + b61*k1 + b62*k2 + b63*k3 + b64*k4 + b65*k5);
   
   x += c1*k1 + c2*k2 + c3*k3 + c4*k4 + c5*k5 + c6*k6;
   x_err = dc1*k1 + dc2*k2 + dc3*k3 + dc4*k4 + dc5*k5 + dc6*k6;

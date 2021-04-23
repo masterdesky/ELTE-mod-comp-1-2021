@@ -28,7 +28,7 @@ int main(int argc, char const *argv[])
   {
     std::cout << "ERROR!\n" << "------" << std::endl;
     std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-    std::cout << "Usage: ./integrate <dx> <x_max> <e/r/rk/rkf>" << std::endl;
+    std::cout << "Usage: ./integrate <dx> <x_max> <a/e/r/rk/rkf>" << std::endl;
     std::cout << "Exiting..." << std::endl;
     exit(EXIT_FAILURE);
   }
@@ -45,11 +45,12 @@ int main(int argc, char const *argv[])
   // Iteration start (i = 1)
   while(Y[0] < x_max)
   {
-    if(intg == "e") { EulerStep(Y, dx, f_prime); }
+    if(intg == "a") { AnalyticStep(Y, dx); }
+    else if(intg == "e") { EulerStep(Y, dx, f_prime); }
     else if(intg == "r") { RK4Step(Y, dx, f_prime); }
     else if(intg == "rk") { RKCKStep(Y, dx, f_prime, Y_err); }
     else if(intg == "rkf") { RKFStep(Y, dx, f_prime, Y_err); }
-    else { std::cout << "Please use 'r', 'e', 'rk' or 'rkf' as third argument!"
+    else { std::cout << "Please use 'a', 'r', 'e', 'rk' or 'rkf' as third argument!"
                      << std::endl; break; }
     std::cout << Y << " +- " << Y_err << std::endl;
   }

@@ -11,6 +11,11 @@
 //
 ////////////////////////////////////////////////////////
 
+// Take a single analytic step
+extern void AnalyticStep(
+  vector2d &x,                             //  extended solution vector
+  double dx                                //  step size
+);
 
 // Take a single Euler step
 extern void EulerStep(
