@@ -13,8 +13,6 @@
 //
 ////////////////////////////////////////////////////////
 
-#include <random>
-
 class Particle {
   private:
     // X and Y coordinates of the particles
@@ -24,18 +22,16 @@ class Particle {
     /* Private methods */
     // Methods to sample uniformly `npart` number of random integers from a set
     // of `all` number integers
-    double _pick_value(std::mt19937_64 &gen, double const &lim);
-    ndvector<1,double>::t _pick(int const &npart, double const &lim);
+    double _pick_value(double const &lim);
 
   public:
     /* Constructors, destructors */
     Particle() { /* Default constructor */ }
 
     /* Public methods */
-    void set_starting_positions(int const &npart,
-                                int const &nrows, int const &ncols, double const &step);
+    void set_starting_position(int const &nrows, int const &ncols, double const &step);
 
-    void trace_particles(Perlin &perlin, int const &npart,
-                         int const &nrows, int const &ncols, int const &res,
-                         double const &T, double const &dt);
+    void trace_particle(Perlin &perlin,
+                        int const &nrows, int const &ncols, double const &step, int const &res,
+                        double const &T, double const &dt);
 };

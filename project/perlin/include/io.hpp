@@ -12,18 +12,10 @@
 //
 ////////////////////////////////////////////////////////
 
-void
-write_vec(std::vector<double> const &v,
-          std::ofstream &output_file)
-{
-  for (auto const &value:v)
-  {
-    output_file << value << ',';
-  }
-}
+#include <vector>
 
-void
-write_vec(std::vector<int> const &v,
+template<typename T> void
+write_vec(std::vector<T> const &v,
           std::ofstream &output_file)
 {
   for (auto const &value:v)

@@ -13,9 +13,9 @@
 //
 ////////////////////////////////////////////////////////
 
-#include <math.h>
+#include <cmath>
 #include <vector>
-#include <template.hpp>
+
 #include <perlin.hpp>
 
 // Generate a 2D coordinate grid between given X and Y limits
@@ -98,7 +98,7 @@ Perlin::_set_sub_cell_corners(int const &nrows, int const &ncols, int const &res
     for(int j = 0; j < ccols; j++)
     {
       int idx = i * ccols + j; // Index for cells
-      int c = i * ncols + j;   // Index for coordinates
+      int c = i * (ccols+1) + j;   // Index for coordinates
       
       // Gather the coordinates of cell's corners.
       // Coordinates are in the upper right quarter of the coordinate system
@@ -107,39 +107,12 @@ Perlin::_set_sub_cell_corners(int const &nrows, int const &ncols, int const &res
       // 2: Bottom right
       // 3: Upper left
       // 4: Upper right
-      sub_cell_corners[idx] = {c, c+1, c+ncols, c+ncols+1};
+      // (ccols + 1) = the number of columns in the sub grid
+      sub_cell_corners[idx] = {c, c+1, c+ccols+1, c+ccols+2};
     }
   }
 
   return(sub_cell_corners);
-}
-
-ndvector<1,int>::t
-Perlin::_get_current_cell(ndvector<1,double>::t const &p,
-                          int const &nrows, int const &ncols, double const &step)
-{
-  // Indices of the current cell
-  int ix = (int)(p[0] / step);
-  int iy = (int)(p[1] / step);
-  // Correct for points on borders
-  if(ix == ncols-1) { ix = ncols-2; }
-  if(iy == nrows-1) { iy = nrows-2; }
-
-  return(_cell_corners[iy * (ncols-1) + ix]);
-}
-
-ndvector<1,int>::t
-Perlin::_get_current_sub_cell(ndvector<1,double>::t const &p,
-                              int const &nrows, int const &ncols, double const &step, int const &res)
-{
-  // Indices of the current cell
-  int ix = (int)(p[0] / step);
-  int iy = (int)(p[1] / step);
-  // Correct for points on borders
-  if(ix == (ncols-1)*res) { ix = (ncols-1)*res-1; }
-  if(iy == (nrows-1)*res) { iy = (nrows-1)*res-1; }
-
-  return(_sub_cell_corners[iy * ((ncols-1)*res-1) + ix]);
 }
 
 double

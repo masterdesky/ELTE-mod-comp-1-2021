@@ -17,7 +17,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <template.hpp>
 #include <perlin.hpp>
 
 // Create a discrete vector field of vectors with randomly choosen
@@ -65,6 +64,36 @@ Perlin::set_sub_grid(int const &nrows, int const &ncols, double const &step, dou
   _sub_cell_corners = _set_sub_cell_corners(nrows, ncols, res);
 }
 
+ndvector<1,int>::t
+Perlin::get_current_cell(ndvector<1,double>::t const &p,
+                         int const &nrows, int const &ncols, double const &step)
+{
+  // Indices of the current cell
+  int ix = (int)(p[0] / step);
+  int iy = (int)(p[1] / step);
+  // Correct for points on borders
+  if(ix == ncols-1) { ix = ncols-2; }
+  if(iy == nrows-1) { iy = nrows-2; }
+
+  return(_cell_corners[iy * (ncols-1) + ix]);
+}
+
+ndvector<1,int>::t
+Perlin::get_current_sub_cell(ndvector<1,double>::t const &p,
+                             int const &nrows, int const &ncols, double const &step, int const &res)
+{
+  // Indices of the current cell
+  int ix = (int)(p[0] / (step/res));
+  int iy = (int)(p[1] / (step/res));
+  // Correct for points on borders
+  double snrows = (nrows-1)*res+1;
+  double sncols = (ncols-1)*res+1;
+  if(ix == sncols-1) { ix = sncols-2; }
+  if(iy == snrows-1) { iy = snrows-2; }
+
+  return(_sub_cell_corners[iy * (sncols-1) + ix]);
+}
+
 // Get the dot product of the sub grid vectors and the nearest main grid vectors
 void
 Perlin::set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res)
@@ -87,7 +116,7 @@ Perlin::set_dot_grid(int const &nrows, int const &ncols, double const &step, dou
   int sub_i = 0;
   for(auto const& p : std::as_const(_sub_grid))
   {
-    auto cc = _get_current_cell(p, nrows, ncols, step);
+    auto cc = get_current_cell(p, nrows, ncols, step);
 
     int sub_c_i = 0;
     for(auto const &c_i : std::as_const(cc))
@@ -155,7 +184,7 @@ Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &step, 
   {
     // Get the coordinates of the i'th point in the simulation
     auto p = _sub_grid[idx];
-    auto cc = _get_current_cell(p, nrows, ncols, step);
+    auto cc = get_current_cell(p, nrows, ncols, step);
 
     // Determine coordinates of bottom left corner
     double x0 = _main_grid[cc[0]][0];
@@ -174,89 +203,4 @@ Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &step, 
   }
 
   _interp_grid = interp_grid;
-}
-
-void
-Perlin::set_sub_grad_field(int const &nrows, int const &ncols, double const &res)
-{
-  // Placeholder for the zero padded gradient field of the sub grid points
-  ndvector<2,int>::t pad_grad_field (
-                                      ((nrows-1)*res+3) * ((ncols-1)*res+3),
-                                      ndvector<1,int>::t (2)
-                                    );
-  // Placeholder for the zero padded interpolated grod
-  ndvector<1,double>::t pad_interp_grid (((ncols-1)*res+3) * ((nrows-1)*res+3), -1);
-
-  // Create the zero padded version of the interpolated grid by inserting the
-  // original interpolated grid inside the zero padded one
-  for(int i = 1; i < (nrows-1)*res+2; i++)
-  {
-    for(int j = 1; j < (ncols-1)*res+2; j++)
-    {
-      int idx = (i-1) * ((ncols-1)*res+1) + (j-1);
-      int pidx = i * ((ncols-1)*res+3) + j;
-      pad_interp_grid[pidx] = _interp_grid[idx];
-    }
-  }
-
-  // Determine gradients in the interpolated grid for every sub grid point
-  //
-  // OH MY GOD PLEASE FORGIVE ME FOR THIS ABOMINATION
-  //
-  for(int i = 1; i < (nrows-1)*res+2; i++)
-  {
-    for(int j = 1; j < (ncols-1)*res+2; j++)
-    {
-      int pidx = i * ((ncols-1)*res+3) + j;
-      double p = pad_interp_grid[pidx];
-      
-      double h_max = 0;
-      ndvector<1,int>::t grad (2);
-      for(int cy = -1; cy <= 1; cy++)
-      {
-        for(int cx = -1; cx <= 1; cx++)
-        {
-          if(cx == 0 && cy == 0)
-          {
-            continue;
-          }
-          else
-          {
-            int cidx = (i+cy) * ((ncols-1)*res+3) + (j+cx);
-            double pc = pad_interp_grid[cidx];
-            double h = p - pc;
-            if(h > h_max)
-            {
-              h_max = h;
-              grad = {cx, cy};
-            }
-          }
-        }
-      }
-      // Adding gradient to sub gradient field
-      pad_grad_field[pidx] = grad;
-    }
-  }
-
-  // Placeholder for the sub gradient field without zero padding
-  ndvector<2,int>::t sub_grad_field (
-                                      ((nrows-1)*res+1) * ((ncols-1)*res+1),
-                                      ndvector<1,int>::t (2)
-                                    );
-
-  // Remove zero padding from the sub gradient field
-  for(int i = 1; i < (nrows-1)*res+2; i++)
-  {
-    for(int j = 1; j < (ncols-1)*res+2; j++)
-    {
-      int idx = (i-1) * ((ncols-1)*res+1) + (j-1);
-      int pidx = i * ((ncols-1)*res+3) + j;
-      sub_grad_field[idx] = pad_grad_field[pidx];
-      //std::cout << "pidx = " << pidx << std::endl;
-      //std::cout << "grads = " << pad_grad_field[pidx][0] << ","
-      //                        << pad_grad_field[pidx][1] << std::endl;
-    }
-  }
-
-  _sub_grad_field = sub_grad_field;
 }

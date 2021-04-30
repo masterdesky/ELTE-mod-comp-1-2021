@@ -15,14 +15,10 @@
 #include <iostream>
 #include <fstream>
 
-#include <math.h>
-#include <vector>
-#include <chrono>
-#include <ctime>
+//#include <chrono>
+//#include <ctime>
 
-#include <template.hpp>
 #include <perlin.hpp>
-#include <io.hpp>
 #include <perlin_io.hpp>
 #include <particle.hpp>
 
@@ -63,16 +59,15 @@ int main(int argc, char const *argv[])
 	perlin_1.set_sub_grid (nrows, ncols, step, res);
 	perlin_1.set_dot_grid (nrows, ncols, step, res);
 	perlin_1.set_interp_grid (nrows, ncols, step, res);
-	perlin_1.set_sub_grad_field (nrows, ncols, res);
 
 	//save_perlin(perlin_1, nrows, ncols, step, res, "1");
 
 	int npart = 2;
 	double T = 1;
-	double dt = 1e-04;
+	double dt = 1e-03;
 	Particle particle;
-	particle.set_starting_positions(npart, nrows, ncols, step);
-	particle.trace_particles(perlin_1, npart, nrows, ncols, res, T, dt);
+	particle.set_starting_position(nrows, ncols, step);
+	particle.trace_particle(perlin_1, nrows, ncols, step, res, T, dt);
 
 	return 0;
 }

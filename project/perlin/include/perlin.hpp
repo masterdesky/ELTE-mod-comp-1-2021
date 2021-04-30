@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include <template.hpp>
+
 class Perlin {
 	/*
 	Implements the classic Perlin noise generation. This generation method
@@ -29,7 +31,13 @@ class Perlin {
 
 	Parameters:
 	-----------
+	nrows : int
 
+	ncols : int
+
+	step : double
+
+	res : double
 
 	
 	All return values are explicitly defined to serve a clearer understanding.
@@ -57,9 +65,6 @@ class Perlin {
 		ndvector<1,int>::t _ngp;
 		// The interpolated grid which will be the final
 		ndvector<1,double>::t _interp_grid;
-		// Gradient field of the final interpolated grid. Contains gradient vectors
-		// in every sub grid point of the Perlin noise
-		ndvector<2,int>::t _sub_grad_field;
 
 
 		// Generate the a coordinate grid between given limits
@@ -75,15 +80,6 @@ class Perlin {
 
 		ndvector<2,int>::t
 		_set_sub_cell_corners(int const &nrows, int const &ncols, int const &res);
-
-
-		ndvector<1,int>::t
-		_get_current_cell(ndvector<1,double>::t const &p,
-											int const &nrows, int const &ncols, double const &step);
-
-		ndvector<1,int>::t
-		_get_current_sub_cell(ndvector<1,double>::t const &p,
-                          int const &nrows, int const &ncols, double const &step, int const &res);
 
 		double
 		_interpolate(double const &d0, double const &d1, double const &w);
@@ -116,6 +112,13 @@ class Perlin {
 		ndvector<2,int>::t get_cell_corners() { return _cell_corners; }
 		ndvector<2,int>::t get_sub_cell_corners() { return _sub_cell_corners; }
 
+		ndvector<1,int>::t
+		get_current_cell(ndvector<1,double>::t const &p,
+										int const &nrows, int const &ncols, double const &step);
+		ndvector<1,int>::t
+		get_current_sub_cell(ndvector<1,double>::t const &p,
+                         int const &nrows, int const &ncols, double const &step, int const &res);
+
 		void set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res);
 		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
 
@@ -125,6 +128,4 @@ class Perlin {
 		void set_interp_grid(int const &nrows, int const &ncols, double const &step, double const &res);
 		ndvector<1,double>::t get_interp_grid() { return _interp_grid; }
 
-		void set_sub_grad_field(int const &nrows, int const &ncols, double const &res);
-		ndvector<2,int>::t get_sub_grad_field() { return _sub_grad_field; }
 };

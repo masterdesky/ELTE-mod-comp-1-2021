@@ -14,6 +14,8 @@
 
 #include <iostream>
 
+#include <io.hpp>
+
 void
 save_perlin(Perlin &perlin,
             int const &nrows, int const &ncols, double const &step, double const &res,
@@ -65,13 +67,6 @@ save_perlin(Perlin &perlin,
   write_to_file (
       interp_grid,
       "../data/interp_grid_" + prefix + ".dat",
-      (nrows-1)*res+1, (ncols-1)*res+1, step/res, res
-  );
-
-  auto sub_grad_field = perlin.get_sub_grad_field();
-  write_to_file (
-      sub_grad_field,
-      "../data/sub_grad_field_" + prefix + ".dat",
       (nrows-1)*res+1, (ncols-1)*res+1, step/res, res
   );
 }

@@ -12,6 +12,9 @@
 //
 ////////////////////////////////////////////////////////
 
+#include <cmath>
+#include <vector>
+
 // Define Pi with great precision and calculate it during compilation time
 constexpr double pi() { return std::atan(1)*4; }
 
