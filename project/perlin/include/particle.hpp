@@ -16,8 +16,9 @@
 class Particle {
   private:
     // X and Y coordinates of the particles
-    ndvector<2,double>::t _positions;
-    ndvector<2,double>::t _velocities;
+    ndvector<2,double>::t _pos;
+    ndvector<2,double>::t _vel;
+    ndvector<2,double>::t _acc;
 
     /* Private methods */
     // Methods to sample uniformly `npart` number of random integers from a set
@@ -29,9 +30,9 @@ class Particle {
     Particle() { /* Default constructor */ }
 
     /* Public methods */
-    void set_starting_position(int const &nrows, int const &ncols, double const &step);
+    void set_starting_position(int const &nrows, int const &ncols);
 
     void trace_particle(Perlin &perlin,
-                        int const &nrows, int const &ncols, double const &step, int const &res,
+                        int const &nrows, int const &ncols, int const &res,
                         double const &T, double const &dt);
 };

@@ -8,13 +8,11 @@ OPTIMIZE	=	-O3 -Wall -Wextra -pedantic
 CFLAGS		=	$(OPTIMIZE) -I$(IDIR)
 LIBS			=	-lm
 
-_DEPS		=	template.hpp vector2d.hpp io.hpp \
-          perlin.hpp perlin_io.hpp integrate.hpp particle.hpp
+_DEPS		=	template.hpp io.hpp perlin.hpp perlin_io.hpp particle.hpp
 DEPS		=	$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ		=	main.o vector2d_arithmetic.o vector2d_io.o vector2d_useful.o \
-          perlin_public.o perlin_private.o particle_public.o particle_private.o \
-          integrate.o
+_OBJ		=	main.o perlin_public.o perlin_private.o \
+          particle_public.o particle_private.o
 OBJ 		=	$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 

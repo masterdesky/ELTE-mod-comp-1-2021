@@ -18,47 +18,46 @@
 #include <vector>
 
 #include <perlin.hpp>
-#include <vector2d.hpp>
 #include <particle.hpp>
-#include <integrate.hpp>
 
 void
-Particle::set_starting_position(int const &nrows, int const &ncols, double const &step)
+Particle::set_starting_position(int const &nrows, int const &ncols)
 {
   // Placeholder for positions
-  ndvector<2,double>::t positions;
+  ndvector<2,double>::t pos;
   // Placeholder for velocities (they're 0 at the start)
-  ndvector<2,double>::t velocities;
+  ndvector<2,double>::t vel;
+  // Placeholder for accelerations (they're 0 at the start)
+  ndvector<2,double>::t acc;
 
-  auto lim_x = ncols * step;
-  auto pos_x = _pick_value(lim_x);
-  auto lim_y = nrows * step;
-  auto pos_y = _pick_value(lim_y);
+  auto pos_x = _pick_value(ncols);
+  auto pos_y = _pick_value(nrows);
 
   ndvector<1,double>::t p = { pos_x, pos_y };
-  positions.push_back(p);
+  ndvector<1,double>::t v = { 0., 0. };
+  ndvector<1,double>::t a = { 0., 0. };
+  pos.push_back(p);
+  vel.push_back(v);
+  acc.push_back(a);
 
-  _positions = positions;
-  _velocities = velocities;
+  _pos = pos;
+  _vel = vel;
+  _acc = acc;
 }
 
 void
 Particle::trace_particle(Perlin &perlin,
-                         int const &nrows, int const &ncols, double const &step, int const &res,
+                         int const &nrows, int const &ncols, int const &res,
                          double const &T, double const &dt)
 {
   // Basically the force field
   auto interp_field = perlin.get_interp_grid();
 
-  // Starting position
-  vector2d p = { _positions[0][0], _positions[0][1] };
-  vector2d p_err = { 0., 0. };
+  // Starting coordinates
+  ndvector<1,double>::t p = { 0, _pos[0][0], _pos[0][1] };
 
   while(p[0] < T)
   {
-    // Step the particle simulation
-    RK4Step(p, dt, perlin, nrows, ncols, step, res);
-    std::cout << "p = " << p << std::endl;
     break;
   }
 }

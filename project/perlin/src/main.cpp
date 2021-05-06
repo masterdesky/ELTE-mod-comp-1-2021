@@ -33,41 +33,49 @@ int main(int argc, char const *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	// Currently does not check for valid input, please
-	// try to give sensible arguments when execute
+	// Does not check for valid input, please
+	// try to give sensible arguments when you're executing it
 	int nrows_0 = std::stoi(argv[1]);
 	int ncols_0 = std::stoi(argv[2]);
-	// Size between two neighbouring grid points in any directions
-	double step_0 = 1.0;
+	
 	// Resolution of sub-cells
-	// A regular cell consists of 4 sub-cells with `res`x`res` number of points
-	int res_0 = std::stoi(argv[3]);
+	int res = std::stoi(argv[3]);
 
 	// Declare changing hyperparameters in the simulation
 	int nrows;
 	int ncols;
-	double step;
-	int res;
 
-	Perlin perlin_1;
+	// Frequency 1
 	nrows = nrows_0 * 1;
 	ncols = ncols_0 * 1;
-	step = step_0 / 1;
-	res = res_0 / 1;
-	perlin_1.set_main_grid (nrows, ncols, step);
-	perlin_1.set_gradient_field (nrows, ncols);
-	perlin_1.set_sub_grid (nrows, ncols, step, res);
-	perlin_1.set_dot_grid (nrows, ncols, step, res);
-	perlin_1.set_interp_grid (nrows, ncols, step, res);
+	Perlin perlin_1(nrows, ncols, res);
+	save_perlin(perlin_1, nrows, ncols, res, "1");
 
-	//save_perlin(perlin_1, nrows, ncols, step, res, "1");
+	// Frequency 2
+	nrows = nrows_0 * 2;
+	ncols = ncols_0 * 2;
+	Perlin perlin_2(nrows, ncols, res);
+	save_perlin(perlin_2, nrows, ncols, res, "2");
 
+	// Frequency 4
+	nrows = nrows_0 * 4;
+	ncols = ncols_0 * 4;
+	Perlin perlin_4(nrows, ncols, res);
+	save_perlin(perlin_4, nrows, ncols, res, "4");
+
+	// Frequency 8
+	nrows = nrows_0 * 8;
+	ncols = ncols_0 * 8;
+	Perlin perlin_8(nrows, ncols, res);
+	save_perlin(perlin_8, nrows, ncols, res, "8");
+
+	/*
 	int npart = 2;
 	double T = 1;
 	double dt = 1e-03;
 	Particle particle;
-	particle.set_starting_position(nrows, ncols, step);
-	particle.trace_particle(perlin_1, nrows, ncols, step, res, T, dt);
-
+	particle.set_starting_position(nrows, ncols);
+	particle.trace_particle(perlin_1, nrows, ncols, res, T, dt);
+	*/
 	return 0;
 }

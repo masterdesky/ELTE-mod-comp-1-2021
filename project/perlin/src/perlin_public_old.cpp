@@ -25,7 +25,7 @@
 void
 Perlin::set_main_grid(int const &nrows, int const &ncols)
 {
-  _main_grid = _get_coordinates(nrows, ncols, 1, 1);
+  _main_grid = _get_coordinates(nrows, ncols, 1);
 }
 
 // Create a discrete vector field of vectors with randomly choosen
@@ -59,7 +59,8 @@ Perlin::set_gradient_field(int const &nrows, int const &ncols)
 void
 Perlin::set_sub_grid(int const &nrows, int const &ncols, double const &res)
 {
-  _sub_grid = _get_coordinates(res, res, (ncols-1)/(res-1), (nrows-1)/(res-1));
+  double sub_step = 1/res;
+  _sub_grid = _get_coordinates((nrows-1)*res+1, (ncols-1)*res+1, sub_step);
   _cell_corners = _set_cell_corners(nrows, ncols);
   _sub_cell_corners = _set_sub_cell_corners(nrows, ncols, res);
 }
@@ -101,7 +102,7 @@ Perlin::set_dot_grid(int const &nrows, int const &ncols, double const &res)
 
   // Placeholder for the field of the distance vectors
   ndvector<3,double>::t dist_field (
-                                     res * res,
+                                     ((nrows-1)*res+1) * ((ncols-1)*res+1),
                                      ndvector<2,double>::t (
                                        4,
                                        ndvector<1,double>::t (2)
@@ -109,7 +110,7 @@ Perlin::set_dot_grid(int const &nrows, int const &ncols, double const &res)
                                    );
   // Placeholder for the dot product field
   ndvector<2,double>::t dot_grid (
-                                    res * res,
+                                    ((nrows-1)*res+1) * ((ncols-1)*res+1),
                                     ndvector<1,double>::t (4)
                                  );
 
@@ -150,7 +151,7 @@ Perlin::set_ngp(int const &nrows, int const &ncols, double const &res)
 {
   // Placeholder for the indices of the nearest main grid points for every
   // sub grid point
-  ndvector<1,int>::t ngp (res * res);
+  ndvector<1,int>::t ngp (((nrows-1)*res+1) * ((ncols-1)*res+1));
 
   // Check whether if this corner is the closest to the sub grid point
   int sub_i = 0;
@@ -177,7 +178,7 @@ Perlin::set_ngp(int const &nrows, int const &ncols, double const &res)
 void
 Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &res)
 {
-  ndvector<1,double>::t interp_grid (res * res);
+  ndvector<1,double>::t interp_grid (((ncols-1)*res+1) * ((nrows-1)*res+1));
 
   int idx = 0;
   for(auto const& dd : std::as_const(_dot_grid))

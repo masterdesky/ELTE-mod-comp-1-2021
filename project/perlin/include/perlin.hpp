@@ -69,11 +69,8 @@ class Perlin {
 
 		// Generate the a coordinate grid between given limits
 		ndvector<2,double>::t static
-		_get_coordinates(int const &nrows, int const &ncols, double const &step);
-
-		// Return a 2D vector with a given `phi` argument
-		ndvector<1,double>::t static
-		_get_gradient(double const &phi);
+		_get_coordinates(int const &nrows, int const &ncols,
+			               double const &stepx, double const &stepy);
 
 		ndvector<2,int>::t
 		_set_cell_corners(int const &nrows, int const &ncols);
@@ -88,44 +85,44 @@ class Perlin {
 		/* Constructors, destructors */
 
 		Perlin() { /* Default constructor */ }
-		Perlin(int &nrows, int &ncols, double &step, int &res)
+		Perlin(int &nrows, int &ncols, int &res)
 		{
 			/* Standard constructor of the Perlin class. */
-			set_main_grid(nrows, ncols, step);
+			set_main_grid(nrows, ncols);
 			set_gradient_field(nrows, ncols);
-			set_sub_grid(nrows, ncols, step, res);
-			set_dot_grid(nrows, ncols, step, res);
-			set_interp_grid(nrows, ncols, step, res);
+			set_sub_grid(nrows, ncols, res);
+			set_dot_grid(nrows, ncols, res);
+			set_interp_grid(nrows, ncols, res);
 		}
 		~Perlin() { std::cout << "Perlin ok." << std::endl; }
 
 		/* Public methods */
 
-		void set_main_grid(int const &nrows, int const &ncols, double const &step);
+		void set_main_grid(int const &nrows, int const &ncols);
 		ndvector<2,double>::t get_main_grid() { return _main_grid; }
 
 		void set_gradient_field(int const &nrows, int const &ncols);
 		ndvector<2,double>::t get_gradient_field() { return _gradient_field; }
 
-		void set_sub_grid(int const &nrows, int const &ncols, double const &step, double const &res);
+		void set_sub_grid(int const &nrows, int const &ncols, double const &res);
 		ndvector<2,double>::t get_sub_grid() { return _sub_grid; }
 		ndvector<2,int>::t get_cell_corners() { return _cell_corners; }
 		ndvector<2,int>::t get_sub_cell_corners() { return _sub_cell_corners; }
 
 		ndvector<1,int>::t
 		get_current_cell(ndvector<1,double>::t const &p,
-										int const &nrows, int const &ncols, double const &step);
+										int const &nrows, int const &ncols);
 		ndvector<1,int>::t
 		get_current_sub_cell(ndvector<1,double>::t const &p,
-                         int const &nrows, int const &ncols, double const &step, int const &res);
+                         int const &nrows, int const &ncols, int const &res);
 
-		void set_dot_grid(int const &nrows, int const &ncols, double const &step, double const &res);
+		void set_dot_grid(int const &nrows, int const &ncols, double const &res);
 		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
 
-		void set_ngp(int const &nrows, int const &ncols, double const &step, double const &res);
+		void set_ngp(int const &nrows, int const &ncols, double const &res);
 		ndvector<1,int>::t get_ngp() { return _ngp; }
 
-		void set_interp_grid(int const &nrows, int const &ncols, double const &step, double const &res);
+		void set_interp_grid(int const &nrows, int const &ncols, double const &res);
 		ndvector<1,double>::t get_interp_grid() { return _interp_grid; }
 
 };

@@ -19,8 +19,7 @@
 
 // Generate a 2D coordinate grid between given X and Y limits
 ndvector<2,double>::t
-Perlin::_get_coordinates(int const &nrows, int const &ncols,
-                         double const &stepx, double const &stepy)
+Perlin::_get_coordinates(int const &nrows, int const &ncols, double const &step)
 {
   // Declaration of the coordinate grid
   ndvector<2,double>::t coords (nrows * ncols);
@@ -34,7 +33,7 @@ Perlin::_get_coordinates(int const &nrows, int const &ncols,
   {
     for(int j = 0; j < ncols; j++)
     {
-      coords[i * ncols + j] = {j*stepx, i*stepy};
+      coords[i * ncols + j] = {j*step, i*step};
     }
   }
 
