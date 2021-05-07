@@ -26,16 +26,17 @@ Particle::set_starting_positions(int const &npart, int const &res)
 {
   // Placeholder for positions
   ndvector<1,double>::t pos_x(npart), pos_y(npart);
-  // Placeholder for velocities (they're 0 at the start)
+  // Placeholder for velocities
   ndvector<1,double>::t vel_x(npart), vel_y(npart);
-  // Placeholder for accelerations (they're 0 at the start)
+  // Placeholder for accelerations
   ndvector<1,double>::t acc_x(npart), acc_y(npart);
 
 
   for(int n = 0; n < npart; n++)
   {
-    pos_x[n] = _pick_value(res-1);
-    pos_y[n] = _pick_value(res-1);
+    pos_x[n] = _pick_value(res-1); pos_y[n] = _pick_value(res-1);
+    vel_x[n] = 0; vel_y[n] = 0;
+    acc_x[n] = 0; acc_y[n] = 0;
   }
 
   _pos_x.push_back(pos_x); _pos_y.push_back(pos_y);

@@ -56,6 +56,7 @@ int main(int argc, char const *argv[])
 
 
 	// Stack Perlin noises to get fractal noise
+	ndvector<1,double>::t pool_field;
 	ndvector<1,double>::t fractal (res * res);
 	for(int i = 0; i < freqs; i++)
 	{
@@ -67,13 +68,20 @@ int main(int argc, char const *argv[])
 		Perlin perlin(nrows_i, ncols_i, res);
 		save_perlin(perlin, pfx);
 
+		if(i == 0)
+		{
+			pool_field = perlin.get_interp_grid();
+		}
+
 		// Get the interpolated grid
 		auto interp = perlin.get_interp_grid();
 		// Adding res to the original
 		std::transform(fractal.begin(), fractal.end(), interp.begin(), fractal.begin(),
 			             std::plus<double>());
 	}
-	Particle particle(fractal, npart, nsteps, res, vmax);
+
+	// Run particle simulation
+	Particle particle(pool_field, npart, nsteps, res, vmax);
 	save_particle(particle);
 
 	return 0;
