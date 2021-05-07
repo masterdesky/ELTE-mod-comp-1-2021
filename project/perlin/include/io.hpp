@@ -36,15 +36,11 @@ write_vec(std::vector<std::vector<T>> const &v,
 }
 
 template <typename T> void
-write_to_file(T const &table, std::string filename,
-              int const &nrows, int const &ncols, double const &res)
+write_to_file(T const &table, std::string filename)
 {
   std::ofstream output_file;
   // Save the input vector
   output_file.open(filename);
-  output_file << nrows << ','
-              << ncols << ','
-              << res   << std::endl;
 
   write_vec(table, output_file);
 

@@ -18,6 +18,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <template.hpp>
+#include <flow_field.hpp>
 #include <perlin.hpp>
 
 // Create a discrete vector field of vectors with randomly choosen
@@ -27,6 +29,7 @@ Perlin::set_main_grid(int const &nrows, int const &ncols)
 {
   _main_grid = _get_coordinates(nrows, ncols, 1, 1);
 }
+
 
 // Create a discrete vector field of vectors with randomly choosen
 // arguments. Vectors are situated in each gridpoints.
@@ -55,6 +58,7 @@ Perlin::set_gradient_field(int const &nrows, int const &ncols)
   _gradient_field = gradient_field;
 }
 
+
 // Create sub-cells in which dot products are evaluated
 void
 Perlin::set_sub_grid(int const &nrows, int const &ncols, double const &res)
@@ -78,21 +82,6 @@ Perlin::get_current_cell(ndvector<1,double>::t const &p,
   return(_cell_corners[iy * (ncols-1) + ix]);
 }
 
-ndvector<1,int>::t
-Perlin::get_current_sub_cell(ndvector<1,double>::t const &p,
-                             int const &nrows, int const &ncols, int const &res)
-{
-  // Indices of the current cell
-  int ix = (int)(p[0] / (1/res));
-  int iy = (int)(p[1] / (1/res));
-  // Correct for points on borders
-  double snrows = (nrows-1)*res+1;
-  double sncols = (ncols-1)*res+1;
-  if(ix == sncols-1) { ix = sncols-2; }
-  if(iy == snrows-1) { iy = snrows-2; }
-
-  return(_sub_cell_corners[iy * (sncols-1) + ix]);
-}
 
 // Get the dot product of the sub grid vectors and the nearest main grid vectors
 void
@@ -145,6 +134,7 @@ Perlin::set_dot_grid(int const &nrows, int const &ncols, double const &res)
   _dist_field = dist_field;
 }
 
+
 void
 Perlin::set_ngp(int const &nrows, int const &ncols, double const &res)
 {
@@ -173,6 +163,7 @@ Perlin::set_ngp(int const &nrows, int const &ncols, double const &res)
 
   _ngp = ngp;
 }
+
 
 void
 Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &res)
@@ -203,4 +194,11 @@ Perlin::set_interp_grid(int const &nrows, int const &ncols, double const &res)
   }
 
   _interp_grid = interp_grid;
+}
+
+
+void
+Perlin::set_flow_field(double const &res)
+{
+  _flow_field = calc_flow_field(_interp_grid, res);
 }

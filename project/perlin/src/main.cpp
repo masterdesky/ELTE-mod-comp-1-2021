@@ -14,68 +14,67 @@
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <functional>
 
 //#include <chrono>
 //#include <ctime>
 
+#include <template.hpp>
+#include <io.hpp>
+#include <flow_field.hpp>
 #include <perlin.hpp>
 #include <perlin_io.hpp>
 #include <particle.hpp>
+#include <particle_io.hpp>
 
 int main(int argc, char const *argv[])
 {
-	if(argc != 4)
+	if(argc != 8)
 	{
 		std::cout << "ERROR!\n" << "------" << std::endl;
 		std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-		std::cout << "Usage: ./perlin <nrows> <ncols> <res>" << std::endl;
+		std::cout << "Usage: ./perlin <nrows> <ncols> <res> <freqs> <npart> <nsteps> <vmax>" << std::endl;
 		std::cout << "Exiting..." << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
 	// Does not check for valid input, please
 	// try to give sensible arguments when you're executing it
-	int nrows_0 = std::stoi(argv[1]);
-	int ncols_0 = std::stoi(argv[2]);
-	
+	int nrows = std::stoi(argv[1]);
+	int ncols = std::stoi(argv[2]);
 	// Resolution of sub-cells
 	int res = std::stoi(argv[3]);
+	// Number of Perlin noises to stack
+	int freqs = std::stoi(argv[4]);
 
-	// Declare changing hyperparameters in the simulation
-	int nrows;
-	int ncols;
+	// Number of particles and updates
+	int npart = std::stoi(argv[5]);
+	int nsteps = std::stoi(argv[6]);
+	// Maximum velocity of particles
+	double vmax = std::stoi(argv[7]);
 
-	// Frequency 1
-	nrows = nrows_0 * 1;
-	ncols = ncols_0 * 1;
-	Perlin perlin_1(nrows, ncols, res);
-	save_perlin(perlin_1, nrows, ncols, res, "1");
 
-	// Frequency 2
-	nrows = nrows_0 * 2;
-	ncols = ncols_0 * 2;
-	Perlin perlin_2(nrows, ncols, res);
-	save_perlin(perlin_2, nrows, ncols, res, "2");
+	// Stack Perlin noises to get fractal noise
+	ndvector<1,double>::t fractal (res * res);
+	for(int i = 0; i < freqs; i++)
+	{
+		int fr = pow(2, i);
+		std::string pfx = std::to_string(fr);
 
-	// Frequency 4
-	nrows = nrows_0 * 4;
-	ncols = ncols_0 * 4;
-	Perlin perlin_4(nrows, ncols, res);
-	save_perlin(perlin_4, nrows, ncols, res, "4");
+		int nrows_i = nrows * fr;
+		int ncols_i = ncols * fr;
+		Perlin perlin(nrows_i, ncols_i, res);
+		save_perlin(perlin, pfx);
 
-	// Frequency 8
-	nrows = nrows_0 * 8;
-	ncols = ncols_0 * 8;
-	Perlin perlin_8(nrows, ncols, res);
-	save_perlin(perlin_8, nrows, ncols, res, "8");
+		// Get the interpolated grid
+		auto interp = perlin.get_interp_grid();
+		// Adding res to the original
+		std::transform(fractal.begin(), fractal.end(), interp.begin(), fractal.begin(),
+			             std::plus<double>());
+	}
+	Particle particle(fractal, npart, nsteps, res, vmax);
+	save_particle(particle);
 
-	/*
-	int npart = 2;
-	double T = 1;
-	double dt = 1e-03;
-	Particle particle;
-	particle.set_starting_position(nrows, ncols);
-	particle.trace_particle(perlin_1, nrows, ncols, res, T, dt);
-	*/
 	return 0;
 }

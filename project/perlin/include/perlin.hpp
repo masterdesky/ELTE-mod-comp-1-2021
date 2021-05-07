@@ -15,8 +15,6 @@
 
 #include <iostream>
 
-#include <template.hpp>
-
 class Perlin {
 	/*
 	Implements the classic Perlin noise generation. This generation method
@@ -65,6 +63,8 @@ class Perlin {
 		ndvector<1,int>::t _ngp;
 		// The interpolated grid which will be the final
 		ndvector<1,double>::t _interp_grid;
+		// The flow field for particle tracing
+		ndvector<2,double>::t _flow_field;
 
 
 		// Generate the a coordinate grid between given limits
@@ -93,6 +93,7 @@ class Perlin {
 			set_sub_grid(nrows, ncols, res);
 			set_dot_grid(nrows, ncols, res);
 			set_interp_grid(nrows, ncols, res);
+			set_flow_field(res);
 		}
 		~Perlin() { std::cout << "Perlin ok." << std::endl; }
 
@@ -112,9 +113,6 @@ class Perlin {
 		ndvector<1,int>::t
 		get_current_cell(ndvector<1,double>::t const &p,
 										int const &nrows, int const &ncols);
-		ndvector<1,int>::t
-		get_current_sub_cell(ndvector<1,double>::t const &p,
-                         int const &nrows, int const &ncols, int const &res);
 
 		void set_dot_grid(int const &nrows, int const &ncols, double const &res);
 		ndvector<2,double>::t get_dot_grid() { return _dot_grid; }
@@ -124,5 +122,8 @@ class Perlin {
 
 		void set_interp_grid(int const &nrows, int const &ncols, double const &res);
 		ndvector<1,double>::t get_interp_grid() { return _interp_grid; }
+
+		void set_flow_field(double const &res);
+		ndvector<2,double>::t get_flow_field() { return _flow_field; }
 
 };

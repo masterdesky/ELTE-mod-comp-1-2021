@@ -2,6 +2,7 @@
 **/bin
 **/obj
 **/data
+**/out
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

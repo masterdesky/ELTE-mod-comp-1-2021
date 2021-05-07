@@ -15,6 +15,7 @@
 
 #include <vector>
 
+#include <template.hpp>
 #include <perlin.hpp>
 
 // Generate a 2D coordinate grid between given X and Y limits
@@ -24,10 +25,6 @@ Perlin::_get_coordinates(int const &nrows, int const &ncols,
 {
   // Declaration of the coordinate grid
   ndvector<2,double>::t coords (nrows * ncols);
-
-  // Limits
-  //ndvector<1,double> X = { 0, nrows*step };
-  //ndvector<1,double> Y = { 0, ncols*step };
 
   // Calculate coordinates of grid points
   for(int i = 0; i < nrows; i++)
