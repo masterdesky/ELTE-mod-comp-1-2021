@@ -110,13 +110,13 @@ Perlin::_interpolate(double const &d0, double const &d1, double const &w) {
   Value of the weight `w` should be in the interval [0,1]
   */
 
-  // Simple interpolation between two values
+  // Simple interpolation between two values (Smoothstep)
   //return( (d1 - d0) * w + d0 );
 
-  // Use this cubic interpolation [[Smoothstep]] instead, for a smooth appearance
+  // 3rd order Smoothstep for a smooth appearance
   //return( (d1 - d0) * (3.0 - w * 2.0) * w * w + d0 );
 
-  // Use [[Smootherstep]] for an even smoother result with a second derivative
+  // 5th order Smoothstep for an even smoother result with a second derivative
   // equal to zero on boundaries
   return( (d1 - d0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + d0 );
 }
