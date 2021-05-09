@@ -30,29 +30,27 @@
 
 int main(int argc, char const *argv[])
 {
-	if(argc != 8)
-	{
-		std::cout << "ERROR!\n" << "------" << std::endl;
-		std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
-		std::cout << "Usage: ./perlin <nrows> <ncols> <res> <freqs> <npart> <nsteps> <vmax>" << std::endl;
-		std::cout << "Exiting..." << std::endl;
-		exit(EXIT_FAILURE);
+  if(argc != 8)
+  {
+    std::cout << "ERROR!\n" << "------" << std::endl;
+    std::cout << "NOT ENOUGH ARGUMENTS WERE GIVEN!" << std::endl;
+    std::cout << "Usage: ./perlin <nrows> <ncols> <res> <freqs> <npart> <nsteps> <vmax>" << std::endl;
+    std::cout << "Exiting..." << std::endl;
+    exit(EXIT_FAILURE);
 	}
 
 	// Does not check for valid input, please
 	// try to give sensible arguments when you're executing it
-	int nrows = std::stoi(argv[1]);
-	int ncols = std::stoi(argv[2]);
-	// Resolution of sub-cells
-	int res = std::stoi(argv[3]);
-	// Number of Perlin noises to stack
-	int freqs = std::stoi(argv[4]);
+  int
+    nrows = std::stoi(argv[1]),     // Number of horizontal main grid lines		
+    ncols = std::stoi(argv[2]),     // Number of vertical main grid lines
+		res = std::stoi(argv[3]),       // Number of sub grid lines
+    freqs = std::stoi(argv[4]),     // Number of Perlin noises to stack
+    npart = std::stoi(argv[5]),     // Number of particles
+    nsteps = std::stoi(argv[6]);    // Number of updates
 
-	// Number of particles and updates
-	int npart = std::stoi(argv[5]);
-	int nsteps = std::stoi(argv[6]);
-	// Maximum velocity of particles
-	double vmax = std::stoi(argv[7]);
+	double
+    vmax = std::stoi(argv[7]);      // Maximum velocity of particles
 
 
 	// Stack Perlin noises to get fractal noise
@@ -73,9 +71,9 @@ int main(int argc, char const *argv[])
 			pool_field = perlin.get_interp_grid();
 		}
 
-		// Get the interpolated grid
+		// Query the Perlin noise map in this step
 		auto interp = perlin.get_interp_grid();
-		// Adding res to the original
+		// Stack it on top of the previous level
 		std::transform(fractal.begin(), fractal.end(), interp.begin(), fractal.begin(),
 			             std::plus<double>());
 	}
