@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
   int
     nrows = std::stoi(argv[1]),     // Number of horizontal main grid lines		
     ncols = std::stoi(argv[2]),     // Number of vertical main grid lines
-		res = std::stoi(argv[3]),       // Number of sub grid lines
+    res = std::stoi(argv[3]),       // Number of sub grid lines
     freqs = std::stoi(argv[4]),     // Number of Perlin noises to stack
     npart = std::stoi(argv[5]),     // Number of particles
     nsteps = std::stoi(argv[6]);    // Number of updates
